@@ -1,0 +1,54 @@
+//
+// Modal
+//
+// .modal{
+//   padding-right: 0!important;
+
+// }
+
+.modal.fade .modal-dialog {
+  transition: all .4s;
+}
+
+
+@media (max-width: 992px) {
+
+  .modal-dialog {
+    max-width: 94vw;
+  }
+}
+
+.modal-title {
+  font-size: $modal-title-font-size;
+}
+
+
+// Fluid modal
+
+.modal-fluid {
+  .modal-dialog {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .modal-content {
+    border-radius: 0;
+  }
+}
+
+.modal-header {
+  .btn-close {
+    padding: ($modal-inner-padding / 2) ($modal-inner-padding / 2);
+    margin: ($modal-inner-padding / -2) ($modal-inner-padding / -2) ($modal-inner-padding / -2) auto;
+  }
+}
+
+
+// Background color variations
+
+@each $color,
+$value in $theme-colors {
+  .modal-#{$color} {
+    @include modal-variant($value);
+  }
+}

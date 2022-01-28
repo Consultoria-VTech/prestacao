@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  vtech-app:
+    container_name: node
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    env_file:
+      - '.env.local'
+    environment:
+      - NODE_ENV=development

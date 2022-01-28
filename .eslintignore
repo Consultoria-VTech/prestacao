@@ -1,0 +1,6 @@
+/node_modules/**
+/.next/**
+/*.js
+/_static/**
+/.vscode/**
+/.git/**
