@@ -20,11 +20,10 @@ export const alterar = async (
 export const deletar = async (
   projeto: Projeto
 ): Promise<boolean | ErrorData> => {
-  const response = await Api.delete<boolean>('/api/projetos', {
-    params: {
+  const response = await Api.put<boolean>('/api/projetos/apagar', 
+  {
       id: projeto.id,
-    },
   })
-
+  
   return response.data
 }

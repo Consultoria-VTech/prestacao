@@ -33,6 +33,8 @@ const ContextMenuContrato = <T extends object = any>({
     show(e, { props: { id: Number(data.index), data } })
   }
 
+  
+
   const handleItemClick = useCallback(
     async ({ event, props }) => {
       const contrato: Contrato = props.data.original
@@ -85,7 +87,7 @@ const ContextMenuContrato = <T extends object = any>({
       {
         id: 'impostos',
         onClick: handleItemClick,
-        title: 'Impostos',
+        title: 'Alíquota',
       },
       {
         id: 'responsaveis',

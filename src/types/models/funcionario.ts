@@ -1,3 +1,4 @@
+import { Usuario } from '@types'
 import { DataPagination } from '../dataPagination'
 import { Empresa } from './empresa'
 
@@ -21,6 +22,7 @@ export type Funcionario = {
   dtDemissao?: Date | string
   fator?: number
   ativo?: boolean
+  usuario?: Usuario
 }
 
 export type FuncionarioPagination = {

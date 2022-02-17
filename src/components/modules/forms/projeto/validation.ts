@@ -16,11 +16,9 @@ export const validation = (): any =>
         }),
         limiteAlmoco: Yup.string()
           .nullable()
-          .required('Campo obrigatório!')
           .transform(v => (!v ? null : v)),
         limiteKm: Yup.string()
           .nullable()
-          .required('Campo obrigatório!')
           .transform(v => (!v ? null : v)),
         dtInicio: Yup.date()
           .default(() => new Date())

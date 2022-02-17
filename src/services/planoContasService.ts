@@ -1,10 +1,18 @@
-import { PlanoContas } from '../types/models/planoContas'
+import { PlanoContas, PlanoContasFiltro } from '../types/models/planoContas'
 import Api, { ErrorData } from './api/api'
 
 export const cadastrar = async (
   planoContas: PlanoContas
 ): Promise<PlanoContas | ErrorData> => {
   const response = await Api.post<PlanoContas>('/api/planocontas', planoContas)
+
+  return response.data
+}
+
+export const consultar = async (
+  planoContas: PlanoContasFiltro
+): Promise<PlanoContas | ErrorData> => {
+  const response = await Api.post<PlanoContas>('/api/planocontas/consultar', planoContas)
 
   return response.data
 }

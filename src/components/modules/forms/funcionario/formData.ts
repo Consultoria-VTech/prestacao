@@ -18,11 +18,11 @@ type FuncionarioInputs = {
   email: FieldProps<string>
   observacao: FieldProps<string>
   cargo: FieldProps<string>
-
   dtAdmissao: FieldProps<string>
   dtDemissao: FieldProps<string>
   fator: FieldProps<number>
   ativo: FieldProps<boolean>
+  usuario: FieldProps<string>
 }
 
 export const dataForm = ({
@@ -134,6 +134,13 @@ export const dataForm = ({
       field: getFieldProps('ativo'),
       isInvalid:
         get(touched, 'ativo') && get(errors, 'ativo') && errors.ativo !== '',
+    },
+    usuario: {
+      field: getFieldProps('usuario'),
+      isInvalid:
+        get(touched, 'usuario') &&
+        get(errors, 'usuario') &&
+        errors.usuario !== '',
     },
   }
 }

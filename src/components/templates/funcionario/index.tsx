@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import React from 'react'
-import { ModalCadastrarFuncionario } from '~/components/modules'
+import { ModalCadastrarFuncionario, ModalVincularUsuario } from '~/components/modules'
 import { InitialData } from '../../../types/initialData'
 import { FuncionarioPagination } from '../../../types/models/funcionario'
 import TableFabricante from '../../modules/tables/table-funcionario/index'
@@ -13,6 +13,7 @@ const FuncionarioTemplate: React.FC<InitialData<FuncionarioPagination>> = ({
     <TemplateDefaultTable>
       <TableFabricante data={data} />
       <ModalCadastrarFuncionario />
+      <ModalVincularUsuario />
     </TemplateDefaultTable>
   )
 }

@@ -131,7 +131,63 @@ const FormFiltrarContasPagar: React.FC = () => {
         if (!isSubmitting) handleSubmit(e)
       }}>
       <div className="row col-md-12 g-3 mt-0">
+      <div className="col-md-12">
+          <FormLabel>Datas</FormLabel>
+          <div className="row">
+            <DatePickerCustom
+              className="col-md-3"
+              label="Dt. inicial emissão"
+              onBlur={dtEmissaoInicial.field.onBlur}
+              isInvalid={dtEmissaoInicial.isInvalid}
+              messageError={errors.dtEmissaoInicial}
+              value={dtEmissaoInicial.field.value}
+              name={dtEmissaoInicial.field.name}
+              popperPlacement="top"
+              onChange={date =>
+                setFieldValue(dtEmissaoInicial.field.name, date)
+              }
+            />
+            <DatePickerCustom
+              className="col-md-3"
+              label="Dt. final emissão"
+              onBlur={dtEmissaoFinal.field.onBlur}
+              isInvalid={dtEmissaoFinal.isInvalid}
+              messageError={errors.dtEmissaoFinal}
+              value={dtEmissaoFinal.field.value}
+              name={dtEmissaoFinal.field.name}
+              popperPlacement="top"
+              onChange={date => setFieldValue(dtEmissaoFinal.field.name, date)}
+            />
+            <DatePickerCustom
+              className="col-md-3"
+              label="Dt. inicial vencimento"
+              onBlur={dtVencimentoInicial.field.onBlur}
+              isInvalid={dtVencimentoInicial.isInvalid}
+              messageError={errors.dtVencimentoInicial}
+              value={dtVencimentoInicial.field.value}
+              name={dtVencimentoInicial.field.name}
+              popperPlacement="top"
+              onChange={date =>
+                setFieldValue(dtVencimentoInicial.field.name, date)
+              }
+            />
+            <DatePickerCustom
+              className="col-md-3"
+              label="Dt. final vencimento"
+              onBlur={dtVencimentoFinal.field.onBlur}
+              isInvalid={dtVencimentoFinal.isInvalid}
+              messageError={errors.dtVencimentoFinal}
+              value={dtVencimentoFinal.field.value}
+              name={dtVencimentoFinal.field.name}
+              popperPlacement="top"
+              onChange={date =>
+                setFieldValue(dtVencimentoFinal.field.name, date)
+              }
+            />
+          </div>
+        </div>
         {/* Dados */}
+        <FormHr />
         <div className="col-md-12">
           <FormLabel>Filtros principais</FormLabel>
           <div className="row">
@@ -198,62 +254,6 @@ const FormFiltrarContasPagar: React.FC = () => {
           </div>
         </div>
         {/* Conta a Pagar */}
-        <div className="col-md-12">
-          <FormHr />
-          <FormLabel>Datas</FormLabel>
-          <div className="row">
-            <DatePickerCustom
-              className="col-md-3"
-              label="Dt. inicial emissão"
-              onBlur={dtEmissaoInicial.field.onBlur}
-              isInvalid={dtEmissaoInicial.isInvalid}
-              messageError={errors.dtEmissaoInicial}
-              value={dtEmissaoInicial.field.value}
-              name={dtEmissaoInicial.field.name}
-              popperPlacement="top"
-              onChange={date =>
-                setFieldValue(dtEmissaoInicial.field.name, date)
-              }
-            />
-            <DatePickerCustom
-              className="col-md-3"
-              label="Dt. final emissão"
-              onBlur={dtEmissaoFinal.field.onBlur}
-              isInvalid={dtEmissaoFinal.isInvalid}
-              messageError={errors.dtEmissaoFinal}
-              value={dtEmissaoFinal.field.value}
-              name={dtEmissaoFinal.field.name}
-              popperPlacement="top"
-              onChange={date => setFieldValue(dtEmissaoFinal.field.name, date)}
-            />
-            <DatePickerCustom
-              className="col-md-3"
-              label="Dt. inicial vencimento"
-              onBlur={dtVencimentoInicial.field.onBlur}
-              isInvalid={dtVencimentoInicial.isInvalid}
-              messageError={errors.dtVencimentoInicial}
-              value={dtVencimentoInicial.field.value}
-              name={dtVencimentoInicial.field.name}
-              popperPlacement="top"
-              onChange={date =>
-                setFieldValue(dtVencimentoInicial.field.name, date)
-              }
-            />
-            <DatePickerCustom
-              className="col-md-3"
-              label="Dt. final vencimento"
-              onBlur={dtVencimentoFinal.field.onBlur}
-              isInvalid={dtVencimentoFinal.isInvalid}
-              messageError={errors.dtVencimentoFinal}
-              value={dtVencimentoFinal.field.value}
-              name={dtVencimentoFinal.field.name}
-              popperPlacement="top"
-              onChange={date =>
-                setFieldValue(dtVencimentoFinal.field.name, date)
-              }
-            />
-          </div>
-        </div>
 
         {/* Documento */}
         <div className="col-md-12">

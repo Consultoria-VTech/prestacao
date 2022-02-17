@@ -23,7 +23,7 @@ const FormFiltrarFornecedor: React.FC = () => {
   const initialValues: FornecedorFiltro = dataModal || {
     idEmpresa: null,
     id: null,
-    nome: '',
+    razao: '',
     cnpj: '',
     ativo: null,
   }
@@ -59,7 +59,7 @@ const FormFiltrarFornecedor: React.FC = () => {
   // #endregion
 
   // #region FORM DATA
-  const { idempresa, id, nome, cnpj, ativo } = dataForm({
+  const { idempresa, id, razao, cnpj, ativo } = dataForm({
     touched,
     errors,
     getFieldProps,
@@ -88,7 +88,7 @@ const FormFiltrarFornecedor: React.FC = () => {
               label="Código"
             />
             <FormGroupInput
-              field={nome}
+              field={razao}
               required
               classNameFormGroup="col-md-12"
               type="text"
@@ -105,7 +105,7 @@ const FormFiltrarFornecedor: React.FC = () => {
               maxLength={18}
               mask="cpfCnpj"
             />
-            <FormGroupSelect
+            {/* <FormGroupSelect
               field={ativo}
               required
               value={ativo.field.value as string}
@@ -115,7 +115,7 @@ const FormFiltrarFornecedor: React.FC = () => {
               <option value="">Todos</option>
               <option value="true">Sim</option>
               <option value="false">Não</option>
-            </FormGroupSelect>
+            </FormGroupSelect> */}
           </div>
         </div>
       </div>

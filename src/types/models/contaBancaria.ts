@@ -17,6 +17,20 @@ export type ContaBancaria = {
   saldoinicial?: number | string
   saldo?: number | string
 }
+export type idcontaBancaria = {
+  id?: number
+  agencia?: number
+  agenciaDv?: number
+  ativo?: boolean
+  banco?: Banco
+  conta?: number
+  contaDv?: number
+  empresa?: Empresa
+  observacao?: string
+  tipo?: string
+  saldoinicial?: number | string
+  saldo?: number | string
+}
 
 export type ContaBancariaFiltro = {
   id?: number

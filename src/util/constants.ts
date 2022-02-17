@@ -26,7 +26,7 @@ export const TipoContaBancaria = [
 
 export const TipoPessoa = [
   'Pessoa física',
-  'Pessoa jurifica',  
+  'Pessoa jurídica',  
 ]
 
 // export const TipoSaldo = ['Crédito', 'Débito']

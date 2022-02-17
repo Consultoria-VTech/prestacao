@@ -26,6 +26,7 @@ export type Contrato = {
   observacao?: string
   tipo?: ContratoTipoEnum
   valorParcela?: number | string
+  parcelas?: string
 }
 
 export type ContratoFiltro = {

@@ -76,7 +76,7 @@ const FormBaixarContasPagar: React.FC = () => {
   const [status, setStatus] = useState(BUTTON_STATE.NOTHING)
 
   const initialValues: Inputs = {
-    valorConta: dataModal?.valorParcela as number,
+    valorConta: dataModal?.valor as number,
     empresa: user.empresa,
     idcp: null,
     idcontaBancaria: { id: null },
@@ -183,19 +183,27 @@ const FormBaixarContasPagar: React.FC = () => {
 
   function validarSaldo() {
     let saldo = saldoConta.saldo
-    if(saldo == undefined || null){
-      return "R$ 0,00"
+    if (saldo == undefined || null) {
+      return 'R$ 0,00'
     } else {
       return formatMoney(saldoConta?.saldo as number)
     }
   }
   function validarSaldoInicial() {
     let saldo = saldoConta.saldoinicial
-    if(saldo == undefined || null){
-      return "R$ 0,00"
+    if (saldo == undefined || null) {
+      return 'R$ 0,00'
     } else {
       return formatMoney(saldoConta?.saldoinicial as number)
     }
+  }
+
+  const blurHandler = () => {
+    Alert({
+      title: 'Atenção',
+      body: 'Se Valor Pago for diferente do Valor a Pagar, Por favor desmarque a opção Pagamento Total e preencha os campos necessários.',
+      type: 'info',
+    })
   }
 
   return (
@@ -222,7 +230,7 @@ const FormBaixarContasPagar: React.FC = () => {
               />
 
               <FormGroupInput
-                value={formatMoney(dataModal?.valorParcela)}
+                value={formatMoney(dataModal?.valor as number)}
                 required
                 classNameFormGroup="col-md-6"
                 type="text"
@@ -239,15 +247,35 @@ const FormBaixarContasPagar: React.FC = () => {
                 placeholder="0,00"
                 mask="currency"
                 label="Valor Pago"
+                onBlur={blurHandler}
                 max={dataModal?.valorConciliado}
                 messageError={errors.valorConciliado}
               />
+              <div className="form-group">
+                <Checkbox
+                  label="Pagamento Total"
+                  id={ativo.field.name}
+                  name={ativo.field.name}
+                  onChange={handleChange}
+                  checked={checked}
+                  className="col-md-4"
+                  style={{
+                    placeSelf: 'flex-end',
+                    height: '46px',
+                    color: '#612D91',
+                  }}
+                  value={ativo.field.value === true ? 1 : 0}
+                  onBlur={ativo.field.onBlur}
+                />
+              </div>
               <FormGroupSelect
                 field={idcontaBancaria}
                 required
                 value={idcontaBancaria.field.value.id}
                 className="col-md-12"
-                label={`Conta Bancária - Saldos: Inicial ${saldoConta ? validarSaldoInicial() : ' Carregando...'}   Atual -  ${saldoConta ? validarSaldo() : ' Carregando...'}`}
+                label={`Conta Bancária - Saldos: Inicial ${
+                  saldoConta ? validarSaldoInicial() : ' Carregando...'
+                }   Atual -  ${saldoConta ? validarSaldo() : ' Carregando...'}`}
                 onChange={e => {
                   setFieldValue(idcontaBancaria.field.name, {
                     id: Number(e.target.value),
@@ -282,23 +310,6 @@ const FormBaixarContasPagar: React.FC = () => {
                 popperPlacement={'top'}
                 onChange={date => setFieldValue(dtbaixa.field.name, date)}
               />
-                            <div className="form-group">
-                <Checkbox
-                  label="Pagamento Total"
-                  id={ativo.field.name}
-                  name={ativo.field.name}
-                  onChange={handleChange}
-                  checked={checked}
-                  className="col-md-4"
-                  style={{
-                    placeSelf: 'flex-end',
-                    height: '46px',
-                    color: '#612D91',
-                  }}
-                  value={ativo.field.value === true ? 1 : 0}
-                  onBlur={ativo.field.onBlur}
-                />
-              </div>
 
               {!checked && (
                 <div>
@@ -333,16 +344,16 @@ const FormBaixarContasPagar: React.FC = () => {
                           {!dataPlanoContas ? 'Carregando...' : 'Selecionar'}
                         </option>
                         {(dataPlanoContas || [])
-                          .filter(
-                            p => {
-                              console.log(dataPlanoContas)
-                              return !p.root &&
+                          .filter(p => {
+                            console.log(dataPlanoContas)
+                            return (
+                              !p.root &&
                               (p.ativo ||
                                 p.id === idplanodecontas.field.value.id) &&
                               p.nivel >= 2 &&
-                              p.observacao == 'P' 
-                            }
-                          )
+                              p.observacao == 'P'
+                            )
+                          })
                           .map(item => {
                             return (
                               <option key={item.id} value={item.id}>
@@ -364,6 +375,7 @@ const FormBaixarContasPagar: React.FC = () => {
             type="button"
             state={status}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(idModal, contasPagar)
               setStatus(BUTTON_STATE.NOTHING)

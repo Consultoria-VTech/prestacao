@@ -81,24 +81,12 @@ const TableEmitirNFSContasReceber: React.FC<TableEmitirNFSContasReceberProps> = 
   const status = (router.query.statusCr as string) || null
   const nDoc = (router.query.nDocCr as string) || null
   const tipoDoc = (router.query.tipoDocCr as string) || null
-  const dtEmissaoInicial =
-    (router.query.dtEmissaoInicialCr &&
-      new Date(
-        new Date(router.query.dtEmissaoInicialCr as string)?.toISOString()
-      )) ||
-    null
-  const dtEmissaoFinal =
-    ((router.query.dtEmissaoFinalCr as string) &&
-      new Date(
-        new Date(router.query.dtEmissaoFinalCr as string).toISOString()
-      )) ||
-    null
   const dtVencimentoInicial =
     ((router.query.dtVencimentoInicialCr as string) &&
       new Date(
         new Date(router.query.dtVencimentoInicialCr as string).toISOString()
       )) ||
-    new Date()
+    null
   const dtVencimentoFinal =
     ((router.query.dtVencimentoFinalCr as string) &&
       new Date(
@@ -112,8 +100,6 @@ const TableEmitirNFSContasReceber: React.FC<TableEmitirNFSContasReceberProps> = 
     idCliente,
     idContrato,
     status,
-    dtEmissaoInicial,
-    dtEmissaoFinal,
     dtVencimentoInicial,
     dtVencimentoFinal,
     tipoDoc,

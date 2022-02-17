@@ -32,7 +32,8 @@ import Alert, {
 import { donwloadFile, getFilename } from '@utils'
 
 type ContextMenuPrestacaoContasProps<T = any> = ContextMenuCustomProps<T> & {
-  tipo: PrestacaoContasTipoEnum
+  tipo?: PrestacaoContasTipoEnum
+  onItemClick?: <D = T>(id: ActionEnum | string, data: D) => void
 }
 
 const ContextMenuPrestacaoContas = <T extends object = any>({
@@ -100,6 +101,7 @@ const ContextMenuPrestacaoContas = <T extends object = any>({
                   TOAST_CONTAINER.app,
                   'Registro atualizado com sucesso!'
                 )
+                location.reload()
                 if (onItemClick)
                   onItemClick<PrestacaoContas>(action, data as PrestacaoContas)
               })
@@ -204,6 +206,7 @@ const ContextMenuPrestacaoContas = <T extends object = any>({
                   TOAST_CONTAINER.app,
                   'Registro atualizado com sucesso!'
                 )
+                location.reload()
                 if (onItemClick)
                   onItemClick<PrestacaoContas>(action, data as PrestacaoContas)
               })

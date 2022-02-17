@@ -82,8 +82,8 @@ const FormEstornarContasPagar: React.FC = () => {
           
         await estornarContasPagar(
           values.idcpbaixa = dataModal.id,
-          values.idcp = dataModal.contasPagar,
-          values.idcontaBancaria = dataModal.idcontaBancaria,
+          values.idcp = dataModal.contasPagar.id,
+          values.idcontaBancaria = dataModal.idcontaBancaria.id,
           values.dtbaixa = format(dataModal.dtBaixa as Date, 'yyyy-MM-dd hh:mm:ss')
           )
           .then(data => {
@@ -148,9 +148,11 @@ const FormEstornarContasPagar: React.FC = () => {
           type="button"
           state={status}
           onSucess={() => {
+            
             handleReset(null)
             closeModal(idModal)
             setStatus(BUTTON_STATE.NOTHING)
+            location.reload()
           }}
           disabled={!dataContaBancaria}
           buttonSize="md"

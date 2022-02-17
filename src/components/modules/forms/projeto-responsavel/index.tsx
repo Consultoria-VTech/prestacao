@@ -169,6 +169,7 @@ export const FormCadastrarProjetoResponsavel = () => {
             type="button"
             state={status}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(ModalEnum.createProjetoResponsavel, projeto)
               setStatus(BUTTON_STATE.NOTHING)

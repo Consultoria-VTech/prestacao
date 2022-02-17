@@ -1,36 +1,35 @@
 import { format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
-import { ContasReceber } from '../../../../types/models/contasReceber'
-import { leftPad } from '../../../../util/stringUtil'
-import Icon from '../../../elements/icon'
-import { formatMoney } from '../../../../util/stringUtil'
 import { ICON_LIBRARY } from '../../../../types/icon'
-import React from 'react'
-import { MainIcons } from './styles'
+import { ContasReceber } from '../../../../types/models/contasReceber'
+import { formatMoney, leftPad } from '../../../../util/stringUtil'
+import Icon from '../../../elements/icon'
 import ContextMenuContasReceber from './context-menu'
+import { MainIcons } from './styles'
 
-const EventClick = (props: CellProps<ContasReceber, ContasReceber>) =>  {
+const EventClick = (props: CellProps<ContasReceber, ContasReceber>) => {
   const { displayMenu } = ContextMenuContasReceber<ContasReceber>({
     onItemClick: null,
   })
 
   return (
-        <MainIcons onClick={(e) => displayMenu({e, data: props.row})}>
-        <span className="btn-Edit" >
+    <MainIcons onClick={e => displayMenu({ e, data: props.row })}>
+      <span className="btn-Edit">
         <Icon icon="FaEdit" iconLibrary={ICON_LIBRARY.FONT_AWESOME} />
-        </span>
-        </MainIcons>
-  )}
+      </span>
+    </MainIcons>
+  )
+}
 
-export const columns = (): Column<ContasReceber>[]=>
+export const columns = (): Column<ContasReceber>[] =>
   useMemo<Column<ContasReceber>[]>(
     () => [
       {
         Header: ' ',
         id: 'icone',
-        Cell: EventClick
+        Cell: EventClick,
       },
       {
         Header: 'Código',
@@ -48,7 +47,7 @@ export const columns = (): Column<ContasReceber>[]=>
       {
         Header: 'Data Vencimento',
         accessor: data =>
-        format(data.dtVencimento as Date, 'dd/MM/yyyy', { locale: pt }),
+          format(data.dtVencimento as Date, 'dd/MM/yyyy', { locale: pt }),
       },
       // {
       //   Header: 'Valor Original',
@@ -56,11 +55,13 @@ export const columns = (): Column<ContasReceber>[]=>
       // },
       {
         Header: 'Valor Parcela',
-        accessor: data => data.valorParcela && formatMoney(data.valorParcela as number),
+        accessor: data =>
+          data.valorParcela && formatMoney(data.valorParcela as number),
       },
       {
         Header: 'Valor Recebido',
-        accessor: data => data.valorBaixa && formatMoney(data.valorBaixa as number),
+        accessor: data =>
+          data.valorBaixa && formatMoney(data.valorBaixa as number),
       },
       {
         Header: 'Data Recebimento',
@@ -80,6 +81,10 @@ export const columns = (): Column<ContasReceber>[]=>
         accessor: 'status',
       },
       // {
+      //   Header: 'Emitida',
+      //   accessor: 'emitido',
+      // },
+      // {
       //   Header: 'Natureza',
       //   accessor: data => data.planoContas?.descricao,
       //   id: 'natureza',
@@ -97,7 +102,7 @@ export const columns = (): Column<ContasReceber>[]=>
       //   Header: 'Documento',
       //   accessor: data => data.nDoc,
       // },
-      
+
       // {
       //   Header: 'Parcela',
       //   accessor: data => leftPad(data.nParcelas, 2),
@@ -147,4 +152,3 @@ export const columns = (): Column<ContasReceber>[]=>
 function handleItemClick(): React.MouseEventHandler<HTMLButtonElement> {
   throw new Error('Function not implemented.')
 }
-

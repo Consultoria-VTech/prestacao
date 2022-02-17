@@ -10,6 +10,7 @@ type ProjetoInputs = {
   dtFinalizacao: FieldProps<string>
   limiteAlmoco: FieldProps<string>
   limiteKm: FieldProps<string>
+  limites: FieldProps<string>
   situacao: FieldProps<ProjetoSituacaoEnum>
 }
 
@@ -50,6 +51,13 @@ export const dataForm = ({
         get(touched, 'dtFinalizacao') &&
         get(errors, 'dtFinalizacao') &&
         errors.dtFinalizacao !== '',
+    },
+    limites: {
+      field: getFieldProps('limites'),
+      isInvalid:
+        get(touched, 'limites') &&
+        get(errors, 'limites') &&
+        errors.limites !== '',
     },
     limiteAlmoco: {
       field: getFieldProps('limiteAlmoco'),

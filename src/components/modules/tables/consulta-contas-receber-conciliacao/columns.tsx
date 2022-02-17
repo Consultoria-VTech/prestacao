@@ -1,27 +1,27 @@
 import { format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
-import Icon from '../../../elements/icon'
-import React from 'react'
-import { MainIcons } from './styles'
 import { ICON_LIBRARY } from '../../../../types/icon'
-import ContextMenuContasReceber from './context-menu'
 import { ContasReceber } from '../../../../types/models/contasReceber'
 import { formatMoney, leftPad } from '../../../../util/stringUtil'
+import Icon from '../../../elements/icon'
+import ContextMenuContasReceber from './context-menu'
+import { MainIcons } from './styles'
 
-const EventClick = (props: CellProps<ContasReceber, ContasReceber>) =>  {
+const EventClick = (props: CellProps<ContasReceber, ContasReceber>) => {
   const { displayMenu } = ContextMenuContasReceber<ContasReceber>({
     onItemClick: null,
   })
 
   return (
-        <MainIcons onClick={(e) => displayMenu({e, data: props.row})}>
-        <span className="btn-Edit" >
+    <MainIcons onClick={e => displayMenu({ e, data: props.row })}>
+      <span className="btn-Edit">
         <Icon icon="FaEdit" iconLibrary={ICON_LIBRARY.FONT_AWESOME} />
-        </span>
-        </MainIcons>
-  )}
+      </span>
+    </MainIcons>
+  )
+}
 
 export const columns = (): Column<ContasReceber>[] =>
   useMemo<Column<ContasReceber>[]>(
@@ -29,7 +29,7 @@ export const columns = (): Column<ContasReceber>[] =>
       {
         Header: ' ',
         id: 'icone',
-        Cell: EventClick
+        Cell: EventClick,
       },
       {
         Header: 'Código',
@@ -37,11 +37,11 @@ export const columns = (): Column<ContasReceber>[] =>
       },
       {
         Header: 'Código CR',
-        accessor: data => leftPad(data.contasreceber, 6),
+        accessor: data => leftPad(data.contasreceber.id, 6),
       },
       {
         Header: 'Valor Recebido',
-        accessor: data => formatMoney(data.valor as number)
+        accessor: data => formatMoney(data.valor as number),
       },
       {
         Header: 'Data Recebimento',
@@ -50,9 +50,16 @@ export const columns = (): Column<ContasReceber>[] =>
             ? format(data.dtBaixa as Date, 'dd/MM/yyyy', { locale: pt })
             : '',
       },
+      // {
+      //   Header: 'Banco',
+      //   accessor: data => data.idcontaBancaria.banco.name,
+      // },
+
       {
         Header: 'Banco',
-        accessor: data => data.idcontaBancaria
+        accessor: data =>
+          data.idcontaBancaria &&
+          `${data?.idcontaBancaria?.agencia}-${data?.idcontaBancaria?.agenciaDv} - ${data?.idcontaBancaria?.banco?.name}`,
       },
       {
         Header: 'Situação',

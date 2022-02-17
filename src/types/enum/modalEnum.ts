@@ -13,6 +13,8 @@ export enum ModalEnum {
   renegociarContasReceber = 'renegociarContasReceber',
   renegociarContasPagar = 'renegociarContasPagar',
 
+  vincularUsuario = 'vincularUsuario',
+
   createTimeSheet = 'createTimeSheet',
   createCliente = 'createCliente',
   createContaPagar = 'createContaPagar',

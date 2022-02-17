@@ -38,7 +38,7 @@ export type PrestacaoContas = {
   empresa?: Empresa
   funcionario?: Funcionario
   projeto?: Projeto
-  dtEmissao?: Date
+  dtEmissao?: Date | string
   observacao?: string
   situacao?: PrestacaoContasSituacaoEnum
   valorCotacao?: number

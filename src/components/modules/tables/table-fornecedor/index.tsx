@@ -28,6 +28,8 @@ import TablePagination from '../../../elements/table-pagination'
 import { useImmutableValue } from './../../../../hooks/useImmutableValue'
 import { columns } from './columns'
 import ContextMenuFornecedor from './context-menu'
+import { consultar } from './../../../../services/fornecedorService'
+import { ErrorData } from '~/services/api/api'
 
 type QueryPageFornecedores = {
   page?: string
@@ -51,19 +53,19 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
 
   const pageCurrent = router.query.page ? Number(router.query.page) - 1 : 0
   const pageSizeUrl = router.query.size ? Number(router.query.size) : 16
-  const idEmpresa = Number(router.query.idEmpresa) || null
-  const id = Number(router.query.id) || null
-  const nome = (router.query.nome as string) || null
-  const cnpj = (router.query.cnpj as string) || null
-  const ativo = (router.query.ativo as string)?.toLowerCase() === 'true' || null
+  // const idEmpresa = Number(router.query.idEmpresa) || null
+  // const id = Number(router.query.id) || null
+  // const nome = (router.query.nome as string) || null
+  // const cnpj = (router.query.cnpj as string) || null
+  // const ativo = (router.query.ativo as string)?.toLowerCase() === 'true' || null
 
-  const [filtros, setFiltros] = useState<FornecedorFiltro>({
-    idEmpresa,
-    id,
-    nome,
-    cnpj,
-    ativo,
-  })
+  // const [filtros, setFiltros] = useState<FornecedorFiltro>({
+  //   idEmpresa,
+  //   id,
+  //   nome,
+  //   cnpj,
+  //   ativo,
+  // })
 
   const {
     getTableProps,
@@ -98,14 +100,14 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
   // &order=${
   //   sortBy.length > 0 ? sortBy[0] : 'id'
   // }&desc=${sortBy.length > 0 ? sortBy[1] : 'desc'}
-  const params = objectToQueryUrl(filtros)
+  //const params = objectToQueryUrl(filtros)
   const {
     data: dataFetch,
     error,
     mutate,
     isValidating,
   } = useFetch<FornecedorPagination>(
-    `/api/fornecedores?${params}&page=${pageIndex + 1}&size=${pageSize}`,
+    `/api/fornecedores?page=${pageIndex + 1}&size=${pageSize}`,
     {
       initialData,
       revalidateOnReconnect: true,
@@ -132,6 +134,11 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
     ContextMenuFornecedor<Fornecedor>({
       onItemClick: deleteFornecedor,
     })
+
+    const filterResultSetData = async (values) : Promise<Fornecedor[] | ErrorData> => {
+      return await consultar(values)
+    }
+    
 
   managerModal.on<Fornecedor>(
     'afterClose',
@@ -167,8 +174,11 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
     'afterClose',
     newValues => {
       if (newValues.props) {
-        updateRouter({ fornecedorFiltros: newValues.props })
-        setFiltros(newValues.props)
+          filterResultSetData(newValues.props).then((resultSetData : Fornecedor[]) => {
+            if(resultSetData){
+              setData(resultSetData)
+            }
+          })
         updateComponent()
       }
     },
@@ -204,11 +214,11 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
     page = page ?? (query.page as string)
     size = size ?? ((query.size as string) || String(pageSize) || '16')
 
-    const params = removeKeyValuesNullObject(fornecedorFiltros || filtros)
+    //const params = removeKeyValuesNullObject(fornecedorFiltros || filtros)
 
-    router.push({
-      query: { ...params, page, size },
-    })
+    // router.push({
+    //   query: { ...params, page, size },
+    // })
   }
 
   // const updateRouter = ({ page, size }: QueryPageFornecedores) => {
@@ -245,18 +255,18 @@ const TableFornecedor: React.FC<InitialData<FornecedorPagination>> = ({
           <BiPlusMedical />
           Cadastrar
         </Button>
-        {/* <Button
+        <Button
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() =>
-            openModalFiltro(ModalEnum.filterFornecedor, filtros, {
+            openModalFiltro(ModalEnum.filterFornecedor, null, {
               action: 'filter',
               showButtonExpand: isExpandModalFilter,
             })
           }>
           <RiFilter2Fill />
           Filtrar
-        </Button> */}
+        </Button>
       </TableHeader>
 
       <TableContent>

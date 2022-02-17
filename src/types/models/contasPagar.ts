@@ -1,6 +1,6 @@
 import { Id } from 'react-toastify'
 import { DataPagination } from '../dataPagination'
-import { ContaBancaria } from './contaBancaria'
+import { ContaBancaria, idcontaBancaria } from './contaBancaria'
 import { Contrato } from './contrato'
 import { Empresa } from './empresa'
 import { Fornecedor } from './fornecedor'
@@ -41,8 +41,8 @@ export type ContasPagar = {
   situacao?: string
   valorConciliado?: number
   valorParcela?: number
-  contasPagar?: number
-  idcontaBancaria?: number
+  contasPagar?: ContasPagar
+  idcontaBancaria?: idcontaBancaria
   idcpbaixa?: ContasPagarBaixa
   centroCusto?: CentroCusto
   idcentrocusto?: number

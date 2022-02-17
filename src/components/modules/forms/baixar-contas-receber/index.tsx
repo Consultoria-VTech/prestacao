@@ -50,6 +50,7 @@ const FormBaixarContasReceber: React.FC = () => {
     action: getAction(),
   })
   const { immutableValue: dataModal } = useImmutableValue(getData())
+  const [inputData, setInputData] = useState(dataModal)
   const [contasReceber, setContasReceber] = useState<ContasReceber>()
   const [checked, setChecked] = useState(true)
   const readOnly = propsModal?.action === 'read'
@@ -89,7 +90,7 @@ const FormBaixarContasReceber: React.FC = () => {
     idplanodecontas: { id: null },
     valorResto: null,
     ativo: true,
-    saldoinicial: null
+    saldoinicial: null,
   }
 
   const validationSchema = validation()
@@ -184,24 +185,40 @@ const FormBaixarContasReceber: React.FC = () => {
     }
   )
 
+  const { data: validarValores } = useFetch<ContasReceber>(
+    `/api/conciliacao/saldo/${idcontaBancaria.field.value.id}`,
+    {
+      revalidateOnReconnect: true,
+      onError: error => {
+        alertError(error, TOAST_CONTAINER.modal)
+      },
+    }
+  )
+
   function validarSaldo() {
     let saldo = saldoConta.saldo
-    if(saldo == undefined || null){
-      return "R$ 0,00"
+    if (saldo == undefined || null) {
+      return 'R$ 0,00'
     } else {
       return formatMoney(saldoConta?.saldo as number)
     }
   }
   function validarSaldoInicial() {
     let saldo = saldoConta.saldoinicial
-    if(saldo == undefined || null){
-      return "R$ 0,00"
+    if (saldo == undefined || null) {
+      return 'R$ 0,00'
     } else {
       return formatMoney(saldoConta?.saldoinicial as number)
     }
   }
 
-
+  const blurHandler = () => {
+    Alert({
+      title: 'Atenção',
+      body: 'Se Valor Recebido for diferente do Valor a Receber, Por favor desmarque a opção Pagamento Total e preencha os campos necessários.',
+      type: 'info',
+    })
+  }
 
   return (
     <FormConciliarReceberStyled>
@@ -244,9 +261,27 @@ const FormBaixarContasReceber: React.FC = () => {
                 placeholder="0,00"
                 mask="currency"
                 label="Valor Recebido"
+                onBlur={blurHandler}
                 max={dataModal?.valorConciliado}
                 messageError={errors.valorConciliado}
               />
+              <div className="form-group">
+                <Checkbox
+                  label="Recebimento Total"
+                  id={ativo.field.name}
+                  name={ativo.field.name}
+                  onChange={handleChange}
+                  checked={checked}
+                  // className="col-md-4"
+                  style={{
+                    placeSelf: 'flex-end',
+                    height: '46px',
+                    color: '#612D91',
+                  }}
+                  value={ativo.field.value === true ? 1 : 0}
+                  onBlur={ativo.field.onBlur}
+                />
+              </div>
               <FormLabel></FormLabel>
 
               <FormGroupSelect
@@ -254,7 +289,9 @@ const FormBaixarContasReceber: React.FC = () => {
                 required
                 value={idcontaBancaria.field.value.id}
                 className="col-md-12"
-                label={`Conta Bancária - Saldos: Inicial - ${saldoConta ? validarSaldoInicial() : ' Carregando...'}   Atual -  ${saldoConta ? validarSaldo() : ' Carregando...'}`}
+                label={`Conta Bancária - Saldos: Inicial - ${
+                  saldoConta ? validarSaldoInicial() : ' Carregando...'
+                }   Atual -  ${saldoConta ? validarSaldo() : ' Carregando...'}`}
                 onChange={e => {
                   setFieldValue(idcontaBancaria.field.name, {
                     id: Number(e.target.value),
@@ -288,24 +325,6 @@ const FormBaixarContasReceber: React.FC = () => {
                 popperPlacement={'top'}
                 onChange={date => setFieldValue(dtbaixa.field.name, date)}
               />
-
-              <div className="form-group">
-                <Checkbox
-                  label="Pagamento Total"
-                  id={ativo.field.name}
-                  name={ativo.field.name}
-                  onChange={handleChange}
-                  checked={checked}
-                  className="col-md-4"
-                  style={{
-                    placeSelf: 'flex-end',
-                    height: '46px',
-                    color: '#612D91',
-                  }}
-                  value={ativo.field.value === true ? 1 : 0}
-                  onBlur={ativo.field.onBlur}
-                />
-              </div>
 
               {!checked && (
                 <div>
@@ -369,6 +388,7 @@ const FormBaixarContasReceber: React.FC = () => {
             type="button"
             state={status}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(idModal, contasReceber)
               setStatus(BUTTON_STATE.NOTHING)

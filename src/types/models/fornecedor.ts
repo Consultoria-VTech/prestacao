@@ -27,7 +27,7 @@ export type Fornecedor = {
 export type FornecedorFiltro = {
   idEmpresa?: number
   id?: number
-  nome?: string
+  razao?: string
   cnpj?: string
   ativo?: boolean | 0 | 1 | -1 | null
 }

@@ -159,7 +159,7 @@ const TableConsultaContasReceber: React.FC<TableConsultaContasReceberProps> = ({
     mutate,
     isValidating,
   } = useFetch<ContasReceberPagination>(
-    `/api/contasreceberbaixa?${params}`,
+    `api/contasreceberbaixa`,
     {
       initialData,
       revalidateOnReconnect: true,

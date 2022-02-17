@@ -22,7 +22,7 @@ export const columns = (): Column<Projeto>[] =>
       },
       {
         Header: 'Nome Cliente',
-        accessor: data => data?.contrato?.cliente?.nome, 
+        accessor: data => data?.contrato?.cliente?.nome || data?.contrato?.fornecedor?.razao || "-", 
       },
       {
         Header: 'Data Inicio',
@@ -36,11 +36,11 @@ export const columns = (): Column<Projeto>[] =>
       },
       {
         Header: 'Limite Km',
-        accessor: data => formatMoney(data.limiteKm as number),
+        accessor: data => formatMoney(data.limiteKm as number) || "-",
       },
       {
         Header: 'Limite almoço',
-        accessor: data => formatMoney(data.limiteAlmoco as number),
+        accessor: data => formatMoney(data.limiteAlmoco as number) || "-",
       },
       {
         Header: 'Situação',

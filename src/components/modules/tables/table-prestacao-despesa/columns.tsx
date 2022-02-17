@@ -7,12 +7,36 @@ import {
   } from '@types'
   import { formatMoney, leftPad , DateFormatEnum, formatDate} from '@utils'
   import { useMemo } from 'react'
-  import { Column } from 'react-table'
+import { CellProps, Column } from 'react-table'
+import Icon from '../../../elements/icon'
+import { ICON_LIBRARY } from '../../../../types/icon'
+import React from 'react'
+import { MainIcons } from './styles'
+import ContextMenuPrestacaoDespesa from './context-menu'
 
+
+const EventClick = (props: CellProps<PrestacaoDespesa, PrestacaoDespesa>) => {
+  const { displayMenu } = ContextMenuPrestacaoDespesa<PrestacaoDespesa>({
+    onItemClick: null,
+  })
+
+  return (
+    <MainIcons onClick={e => displayMenu({ e, data: props.row })}>
+      <span className="btn-Edit">
+        <Icon icon="FaEdit" iconLibrary={ICON_LIBRARY.FONT_AWESOME} />
+      </span>
+    </MainIcons>
+  )
+}
 
   export const columns = (): Column<PrestacaoDespesa>[] =>
     useMemo<Column<PrestacaoDespesa>[]>(
       () => [
+        {
+          Header: ' ',
+          id: 'icone',
+          Cell: EventClick
+        },
         {
           Header: 'Código',
           accessor: data => leftPad(data.id, 5),
@@ -36,10 +60,10 @@ import {
           Header: 'Valor',
           accessor: data => data.valor && formatMoney(data.valor as number),
         },
-        {
-          Header: 'Limite/KM',
-          accessor: data => data.quilometragem
-        },
+        // {
+        //   Header: 'Limite/KM',
+        //   accessor: data => data.quilometragem
+        // },
         {
           Header: 'Status',
           accessor: data => PrestacaoDespesaStatus[data.status],

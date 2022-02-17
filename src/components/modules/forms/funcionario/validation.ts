@@ -80,11 +80,12 @@ export const validation = (): any =>
           .transform(v => (!v ? '' : v))
           .required('Campo obrigatório!')
           .transform(v => (!v ? '' : v)),
-
+          
         dtAdmissao: Yup.date()
-          .default(() => new Date())
           .nullable()
-          .required('Campo obrigatório!'),
+
+        
+        
       }),
     []
   )

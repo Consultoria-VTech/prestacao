@@ -139,11 +139,11 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
         ) {
           await alterar(data)
             .then(dataValues => {
-              if (propsModal?.action !== 'aprovar') {
+              if (propsModal?.action === 'update') {
                 alertUpdateSuccess()
                 setStatus(BUTTON_STATE.SUCCESS)
+                setPrestacaoDespesa(dataValues as PrestacaoDespesa)
               }
-              setPrestacaoDespesa(dataValues as PrestacaoDespesa)
             })
             .catch((e: ErrorData) => {
               alertError(e, TOAST_CONTAINER.modal)
@@ -421,7 +421,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               </div>
             </div>
             
-            <FormGroupSelect
+            {/* <FormGroupSelect
               field={statusPrestacao}
               required
               value={statusPrestacao.field.value}
@@ -443,7 +443,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                     </option>
                   )
                 })}
-            </FormGroupSelect>
+            </FormGroupSelect> */}
             <FormGroupInput
               field={observacao}
               classNameFormGroup="col-md-12"
@@ -563,6 +563,8 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
             Salvar
           </Button>
         )}
+
+        
         {propsModal?.action === 'aprovar' && (
           <>
             <Button

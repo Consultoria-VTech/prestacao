@@ -4,7 +4,7 @@ import { DataForm, FieldProps } from '../../../../types/formProps'
 type FornecedorFiltroInputs = {
   idempresa: FieldProps<number>
   id: FieldProps<number>
-  nome: FieldProps<string>
+  razao: FieldProps<string>
   cnpj: FieldProps<string>
   ativo: FieldProps<string | null>
 }
@@ -23,10 +23,10 @@ export const dataForm = ({
       field: getFieldProps('id'),
       isInvalid: false,
     },
-    nome: {
-      field: getFieldProps('nome'),
+    razao: {
+      field: getFieldProps('razao'),
       isInvalid:
-        get(touched, 'nome') && get(errors, 'nome') && errors.nome !== '',
+        get(touched, 'razao') && get(errors, 'razao') && errors.razao !== '',
     },
     cnpj: {
       field: getFieldProps('cnpj'),

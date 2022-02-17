@@ -298,7 +298,7 @@ const TableContasPagar: React.FC<InitialData<ContasPagarPagination>> = ({
       var pagination = dataFetch?.pagination
       let dataFetchFiltered = (dataFetch?.data || [])
         .filter(row => {
-          if (row.status == 'PAGO') {
+          if (row.status == 'PAGO' || row.bordero == 'NAO') {
             pagination.total--
             return false
           }

@@ -155,7 +155,7 @@ const PageConfiguration: Page[] = [
                     show: true,
                   },
                   {
-                    name: 'Impostos',
+                    name: 'Alíquota',
                     path: '/gestao/cadastros/contratos/[id]/impostos',
                     icon: {
                       icon: 'MdAccountBalance',

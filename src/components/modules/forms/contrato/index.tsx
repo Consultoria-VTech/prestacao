@@ -36,11 +36,10 @@ const FormCadastrarContrato: React.FC = () => {
   const { immutableValue: dataModal } = useImmutableValue(getData())
   const readOnly = propsModal?.action === 'read'
   const [contrato, setContrato] = useState<Contrato>()
+  const [checked, setChecked] = useState(true)
   const { user } = useAuth()
 
-  const { data: dataCliente } = useFetch<Cliente[]>(
-    `/api/clientes/consultar`, 
-    {
+  const { data: dataCliente } = useFetch<Cliente[]>(`/api/clientes/consultar`, {
     revalidateOnReconnect: true,
     onError: error => {
       alertError(error, TOAST_CONTAINER.modal)
@@ -56,7 +55,7 @@ const FormCadastrarContrato: React.FC = () => {
       },
     }
   )
-  
+
   const { data: dataCentroCusto } = useFetch<CentroCusto[]>(
     `/api/centrocustos/consultar`,
     {
@@ -81,8 +80,9 @@ const FormCadastrarContrato: React.FC = () => {
     dtVencimento: null,
     valor: null,
     status: null,
-    nparcelas: null,
+    nparcelas: 1,
     tipo: null,
+    parcelas: null,
   }
 
   const validationSchema = validation()
@@ -121,6 +121,7 @@ const FormCadastrarContrato: React.FC = () => {
               setStatus(BUTTON_STATE.ERROR)
             })
         } else {
+          
           await cadastrar(values)
             .then(data => {
               alertCreateSuccess()
@@ -145,6 +146,10 @@ const FormCadastrarContrato: React.FC = () => {
     },
   })
 
+  const handleChange = () => {
+    // Change state to the opposite (to ture) when checkbox changes
+    setChecked(!checked)
+  }
   // #endregion
 
   // #region FORM DATA
@@ -159,12 +164,15 @@ const FormCadastrarContrato: React.FC = () => {
     status: StatusField,
     nparcelas,
     tipo,
+    parcelas
   } = dataForm({
     touched,
     errors,
     getFieldProps,
   })
   // #endregion
+
+  
 
   return (
     <form
@@ -180,17 +188,17 @@ const FormCadastrarContrato: React.FC = () => {
           <FormLabel>Dados</FormLabel>
           <div className="row">
             <FormGroupSelect
-               field={tipo}
-               required
-               value={tipo.field.value}
-               className="col-md-12"
-               label="Tipo"
-               onChange={e => {
-                 setFieldValue(cliente.field.name, { id: null })
-                 setFieldValue(fornecedor.field.name, { id: null })
-                 setFieldError(cliente.field.name, null)
-                 setFieldError(fornecedor.field.name, null)
-                 setFieldValue(tipo.field.name, e.target.value)
+              field={tipo}
+              required
+              value={tipo.field.value}
+              className="col-md-12"
+              label="Tipo"
+              onChange={e => {
+                setFieldValue(cliente.field.name, { id: null })
+                setFieldValue(fornecedor.field.name, { id: null })
+                setFieldError(cliente.field.name, null)
+                setFieldError(fornecedor.field.name, null)
+                setFieldValue(tipo.field.name, e.target.value)
               }}
               disabled={readOnly || propsModal?.action === 'update'}
               messageError={errors.tipo}>
@@ -251,7 +259,7 @@ const FormCadastrarContrato: React.FC = () => {
                   })}
               </FormGroupSelect>
             )}
-            
+
             <FormGroupSelect
               field={centroCusto}
               required
@@ -265,13 +273,14 @@ const FormCadastrarContrato: React.FC = () => {
               }}
               disabled={readOnly}
               messageError={errors.centroCusto?.id}>
-              <option value={null}>
-                {!dataCentroCusto ? 'Carregando...' : 'Selecionar'}
-              </option>
+                <option value={null}>
+                  {!dataCentroCusto ? 'Carregando...' : 'Selecionar'}
+                </option>
               {(dataCentroCusto || [])
                 .filter(p => p.ativo)
                 .map(item => {
                   return (
+                    
                     <option key={item.id} value={item.id}>
                       {item.descricao}
                     </option>
@@ -280,7 +289,7 @@ const FormCadastrarContrato: React.FC = () => {
             </FormGroupSelect>
 
             <DatePickerCustom
-              className="col-md-3"
+              className="col-md-4"
               label="Data emissão"
               onBlur={dtEmissao.field.onBlur}
               isInvalid={dtEmissao.isInvalid}
@@ -292,8 +301,8 @@ const FormCadastrarContrato: React.FC = () => {
               onChange={date => setFieldValue(dtEmissao.field.name, date)}
             />
             <DatePickerCustom
-              className="col-md-3"
-              label="Data vencimento"
+              className="col-md-4"
+              label="Data vencimento 1ª parcela"
               onBlur={dtVencimento.field.onBlur}
               isInvalid={dtVencimento.isInvalid}
               messageError={errors.dtVencimento}
@@ -306,7 +315,7 @@ const FormCadastrarContrato: React.FC = () => {
             <FormGroupInput
               field={valor}
               required
-              classNameFormGroup="col-md-3"
+              classNameFormGroup="col-md-4"
               type="text"
               placeholder="0,00"
               label="Valor"
@@ -314,7 +323,38 @@ const FormCadastrarContrato: React.FC = () => {
               readOnly={readOnly}
               // messageError={errors.valor}
             />
+
             <FormGroupSelect
+              field={parcelas}
+              required
+              value={parcelas.field.value}
+              className="col-md-4"
+              label="Parcelas"
+              disabled={readOnly}
+              messageError={errors.parcelas}>
+              <option value="nao">Não</option>
+              <option value="sim">Sim</option>
+            </FormGroupSelect>
+
+            {parcelas.field.value === 'sim' && (
+              <FormGroupSelect
+                field={nparcelas}
+                required
+                value={nparcelas.field.value}
+                className="col-md-4"
+                label="Número de Parcelas"
+                disabled={readOnly}
+                messageError={errors.nparcelas}>
+                
+                {NumeroParcelas.map((item, index) => (
+                  <option key={item} value={item} selected={index === 0}>
+                    {item}
+                  </option>
+                ))}
+              </FormGroupSelect>
+            )}
+
+            {/* <FormGroupSelect
               field={nparcelas}
               required
               value={nparcelas.field.value}
@@ -330,7 +370,7 @@ const FormCadastrarContrato: React.FC = () => {
                   {item}
                 </option>
               ))}
-            </FormGroupSelect>
+            </FormGroupSelect> */}
             <FormGroupInput
               field={observacao}
               required

@@ -38,15 +38,15 @@ const FormEmitirNFSContasReceber: React.FC = () => {
   const [contasReceber, setContasReceber] = useState<ContasReceber>()
   const readOnly = propsModal?.action === 'read'
 
-  const { data: dataContaBancaria } = useFetch<ContaBancaria[]>(
-    `/api/contasbancarias/consultar`,
-    {
-      revalidateOnReconnect: true,
-      onError: error => {
-        alertError(error, TOAST_CONTAINER.modal)
-      },
-    }
-  )
+  // const { data: dataContaBancaria } = useFetch<ContaBancaria[]>(
+  //   `/api/contasbancarias/consultar`,
+  //   {
+  //     revalidateOnReconnect: true,
+  //     onError: error => {
+  //       alertError(error, TOAST_CONTAINER.modal)
+  //     },
+  //   }
+  // )
 
   // #region FORM SUBMIT
   const [status, setStatus] = useState(BUTTON_STATE.NOTHING)
@@ -79,15 +79,14 @@ const FormEmitirNFSContasReceber: React.FC = () => {
         setSubmitting(true)
         setStatus(BUTTON_STATE.LOADING)
 
-        await emitirNfsContasReceber(
-          dataModal.id, 
-          values.contaBancaria.id = dataModal.contaBancaria.id,
-          )
+        await emitirNfsContasReceber(dataModal.id)
+          
           .then(data => {
             alertUpdateSuccess(
               TOAST_CONTAINER.modal,
               'Conta a receber emitida com sucesso!'
             )
+            
             setContasReceber(data as ContasReceber)
             setStatus(BUTTON_STATE.SUCCESS)
           })
@@ -151,6 +150,7 @@ const FormEmitirNFSContasReceber: React.FC = () => {
           type="button"
           state={status}
           onSucess={() => {
+            location.reload()
             handleReset(null)
             closeModal(ModalEnum.emitirNFSContasReceber)
             setStatus(BUTTON_STATE.NOTHING)

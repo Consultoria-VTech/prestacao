@@ -10,6 +10,7 @@ import { useModal } from './../../../../hooks/useModal'
 import Button, { BUTTON_STATE } from './../../../elements/button/index'
 import { FormGroupInput, FormGroupSelect } from './../../form-group/index'
 import { dataForm } from './formData'
+import { consultar } from './../../../../services/clienteService'
 
 const FormFiltrarCliente: React.FC = () => {
   const idModal = ModalEnum.filterCliente
@@ -41,18 +42,21 @@ const FormFiltrarCliente: React.FC = () => {
     enableReinitialize: true,
     initialValues: initialValues,
 
+    
     onSubmit: async (values: ClienteFiltro) => {
       try {
+      await consultar(values)
         setSubmitting(true)
         closeModal(idModal, values)
         setSubmitting(false)
-      } catch (e) {
+        } catch (e) {
         setStatus(BUTTON_STATE.ERROR)
         Alert({
           title: 'Aconteceu um erro',
           body: e.message,
           type: 'error',
         })
+        
       }
     },
   })
@@ -106,7 +110,7 @@ const FormFiltrarCliente: React.FC = () => {
               maxLength={18}
               mask="cpfCnpj"
             />
-            <FormGroupSelect
+            {/* <FormGroupSelect
               field={filial}
               required
               value={filial.field.value}
@@ -128,7 +132,7 @@ const FormFiltrarCliente: React.FC = () => {
               <option value="">Todos</option>
               <option value="true">Sim</option>
               <option value="false">Não</option>
-            </FormGroupSelect>
+            </FormGroupSelect> */}
           </div>
         </div>
       </div>

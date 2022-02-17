@@ -130,6 +130,7 @@ import {
       dtFinalizacao,
       limiteAlmoco,
       limiteKm,
+      limites,
       situacao,
     } = dataForm({
       touched,
@@ -186,14 +187,14 @@ import {
                       )} Ven. ${format(
                         new Date(item.dtVencimento),
                         'dd/MM/yyyy'
-                      )}`}
+                      )} - ${item.cliente?.nome || item.fornecedor?.razao}`}
                     </option>
                   )
                 })}
               </FormGroupSelect>
   
               <DatePickerCustom
-                className="col-md-3"
+                className="col-md-6"
                 label="Data Inicial"
                 onBlur={dtInicio.field.onBlur}
                 isInvalid={dtInicio.isInvalid}
@@ -205,7 +206,7 @@ import {
                 onChange={date => setFieldValue(dtInicio.field.name, date)}
               />
               <DatePickerCustom
-                className="col-md-3"
+                className="col-md-6"
                 label="Data Finalização"
                 onBlur={dtFinalizacao.field.onBlur}
                 isInvalid={dtFinalizacao.isInvalid}
@@ -216,10 +217,21 @@ import {
                 popperPlacement="auto"
                 onChange={date => setFieldValue(dtFinalizacao.field.name, date)}
               />
+            <FormGroupSelect
+              field={limites}
+              required
+              value={limites.field.value}
+              className="col-md-4"
+              label="Definir Limites?"
+              disabled={readOnly}>
+              <option value="nao">Não</option>
+              <option value="sim">Sim</option>
+            </FormGroupSelect>
+            {limites.field.value === 'sim' && (
               <FormGroupInput
                 field={limiteAlmoco}
                 required
-                classNameFormGroup="col-md-3"
+                classNameFormGroup="col-md-4"
                 type="text"
                 placeholder="0,00"
                 label="Limite Almoço"
@@ -227,10 +239,12 @@ import {
                 readOnly={readOnly}
                 messageError={errors.limiteAlmoco}
               />
-              <FormGroupInput
+              )}
+            {limites.field.value === 'sim' && (
+                <FormGroupInput
                 field={limiteKm}
                 required
-                classNameFormGroup="col-md-3"
+                classNameFormGroup="col-md-4"
                 type="text"
                 placeholder="0,00"
                 label="Limite Km"
@@ -238,6 +252,8 @@ import {
                 readOnly={readOnly}
                 messageError={errors.limiteKm}
               />
+              )}
+
               <FormGroupSelect
                 field={situacao}
                 required
@@ -271,6 +287,7 @@ import {
               type="button"
               state={status}
               onSucess={() => {
+                location.reload()
                 handleReset(null)
                 closeModal(ModalEnum.createProjeto, projeto)
                 // fetchData({ pageSize: pageSize, pageIndex: pageIndex })

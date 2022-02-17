@@ -6,6 +6,7 @@ import { BiPlusMedical } from 'react-icons/bi'
 import { RiFilter2Fill } from 'react-icons/ri'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { mutate as globalMutate } from 'swr'
+import Api, { ErrorData } from '~/services/api/api'
 import { useFetch } from '../../../../hooks/useFetch'
 import { managerModal, useModal } from '../../../../hooks/useModal'
 import { ModalEnum } from '../../../../types/enum/modalEnum'
@@ -27,6 +28,8 @@ import TablePagination from '../../../elements/table-pagination'
 import { useImmutableValue } from './../../../../hooks/useImmutableValue'
 import { removeKeyValuesNullObject } from './../../../../util/removeKeyValuesNullObject'
 import { columns } from './columns'
+import { consultar } from './../../../../services/clienteService'
+
 import ContextMenuCliente from './context-menu'
 
 type QueryPageClientes = {
@@ -34,6 +37,14 @@ type QueryPageClientes = {
   size?: string
   clienteFiltros?: ClienteFiltro
 }
+
+// export const consultar = async (
+//   cliente: ClienteFiltro
+// ): Promise<Cliente | ErrorData> => {
+//   const response = await Api.post<Cliente>('/api/clientes/consultar', cliente)
+
+//   return response.data
+// }
 
 const TableCliente: React.FC<InitialData<ClientePagination>> = ({
   data: initialData,
@@ -48,24 +59,24 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
     ModalEnum.filterCliente
   )
   const router = useRouter()
-
+  // console.log(consultar())
   const pageCurrent = router.query.page ? Number(router.query.page) - 1 : 0
   const pageSizeUrl = router.query.size ? Number(router.query.size) : 16
-  const idEmpresa = Number(router.query.idEmpresa) || null
-  const id = Number(router.query.id) || null
-  const nome = (router.query.nome as string) || null
-  const cnpj = (router.query.cnpj as string) || null
-  const filial = (router.query.filial as string) || null
-  const ativo = (router.query.ativo as string)?.toLowerCase() === 'true' || null
+  // const idEmpresa = Number(router.query.idEmpresa) || null
+  // const id = Number(router.query.id) || null
+  // const nome = (router.query.nome as string) || null
+  // const cnpj = (router.query.cnpj as string) || null
+  // const filial = (router.query.filial as string) || null
+  // const ativo = (router.query.ativo as string)?.toLowerCase() === 'true' || null
 
-  const [filtros, setFiltros] = useState<ClienteFiltro>({
-    idEmpresa,
-    id,
-    nome,
-    cnpj,
-    filial,
-    ativo,
-  })
+  // const [filtros, setFiltros] = useState<ClienteFiltro>({
+  //   idEmpresa,
+  //   id,
+  //   nome,
+  //   cnpj,
+  //   filial,
+  //   ativo,
+  // })
 
   const {
     getTableProps,
@@ -101,26 +112,27 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
   //   sortBy.length > 0 ? sortBy[0] : 'id'
   // }&desc=${sortBy.length > 0 ? sortBy[1] : 'desc'}
 
-  const updateRouter = ({ page, size, clienteFiltros }: QueryPageClientes) => {
-    const query = router.query
-    page = page ?? (query.page as string)
-    size = size ?? ((query.size as string) || String(pageSize) || '16')
 
-    const params = removeKeyValuesNullObject(clienteFiltros || filtros)
+//   const updateRouter = ({ page, size, clienteFiltros }: QueryPageClientes) => {
+//     const query = router.query
+//     page = page ?? (query.page as string)
+//     size = size ?? ((query.size as string) || String(pageSize) || '16')
 
-    router.push({
-      query: { ...params, page, size },
-    })
-  }
+//  //   const params = removeKeyValuesNullObject(clienteFiltros || filtros)
 
-  const params = objectToQueryUrl(filtros)
+//     router.push({
+//       query: { ...params, page, size },
+//     })
+//   }
+
+ // const params = objectToQueryUrl(filtros)
   const {
     data: dataFetch,
     error,
     mutate,
     isValidating,
   } = useFetch<ClientePagination>(
-    `/api/clientes?${params}&page=${pageIndex + 1}&size=${pageSize}`,
+    `/api/clientes?page=${pageIndex + 1}&size=${pageSize}`,
     {
       initialData,
       revalidateOnReconnect: true,
@@ -155,6 +167,10 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
   const { idContextMenu, displayMenu, items } = ContextMenuCliente<Cliente>({
     onItemClick: deleteCliente,
   })
+ 
+  const filterResultSetData = async (values) : Promise<Cliente[] | ErrorData> => {
+    return await consultar(values)
+  }
 
   managerModal.on<Cliente>(
     'afterClose',
@@ -186,11 +202,15 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
 
   managerModal.on<ClienteFiltro>(
     'afterClose',
-    newValues => {
+    newValues => {     
       if (newValues.props) {
-        updateRouter({ clienteFiltros: newValues.props })
-        setFiltros(newValues.props)
+        filterResultSetData(newValues.props).then((resultSetData : Cliente[]) => {
+          if(resultSetData){
+            setData(resultSetData)
+          }
+        })
         updateComponent()
+        
       }
     },
     ModalEnum.filterCliente,
@@ -198,25 +218,22 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
   )
 
   useEffect(() => {
-    console.log('Antes', dataFetch.pagination)
     if (dataFetch) {
       setData(dataFetch.data)
       setPageCount(dataFetch.pagination?.pageCount)
       setTotalItems(dataFetch.pagination?.total)
     }
-  }, [dataFetch, console.log('Depois', dataFetch.pagination)])
+  }, [dataFetch])
 
   const onPageChanged = data => {
     if (isValidating) return
-
     const { currentPage } = data
-    if (currentPage !== 0) updateRouter({ page: currentPage })
-
-    gotoPage(currentPage - 1)
+    // if (currentPage !== 0) updateRouter({ page: currentPage })
+    // gotoPage(currentPage - 1)
   }
 
   const onPageSizeChange = (size: number) => {
-    updateRouter({ page: '1', size: String(size) })
+   // updateRouter({ page: '1', size: String(size) })
     setPageSize(size)
     gotoPage(0)
   }
@@ -233,18 +250,19 @@ const TableCliente: React.FC<InitialData<ClientePagination>> = ({
           <BiPlusMedical />
           Cadastrar
         </Button>
-        {/* <Button
+        <Button
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() =>
-            openModalFiltro(ModalEnum.filterCliente, filtros, {
+            openModalFiltro(ModalEnum.filterCliente, null, {
               action: 'filter',
               showButtonExpand: isExpandModalFilter,
+              
             })
           }>
           <RiFilter2Fill />
           Filtrar
-        </Button> */}
+        </Button>
       </TableHeader>
 
       <TableContent>

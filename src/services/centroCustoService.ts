@@ -1,4 +1,4 @@
-import { CentroCusto } from '../types/models/centroCusto'
+import { CentroCusto, CentroCustoFiltro } from '../types/models/centroCusto'
 import Api, { ErrorData } from './api/api'
 
 export const cadastrar = async (
@@ -7,6 +7,14 @@ export const cadastrar = async (
   const response = await Api.post<CentroCusto>('/api/centrocustos', centroCusto)
 
   return response.data
+}
+
+export const consultar = async (
+  centroCusto: CentroCustoFiltro
+): Promise<CentroCusto[] | ErrorData> => {
+  const response = await Api.post<CentroCusto>('/api/centrocustos/consultar', centroCusto)
+
+  return response.data as CentroCusto[]
 }
 
 export const alterar = async (
@@ -26,5 +34,6 @@ export const deletar = async (
     },
   })
 
-  return response.data
+  return response
 }
+

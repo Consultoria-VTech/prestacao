@@ -116,29 +116,29 @@ const TablePrestacaoContas = ({
   const params = objectToQueryUrl(filtros)
   const getTipoSituacao = () => {
     switch (tipo) {
+      case PrestacaoContasTipoEnum.MinhasPrestacoes:
+        return "/api/prestacaocontas?${params}&idSituacao=&"
       case PrestacaoContasTipoEnum.AprovacaoAdministrador:
-        return PrestacaoContasSituacaoEnum.AprovacaoAdministrador
+        return "/api/prestacaocontas?${params}&idSituacao=2&"
       case PrestacaoContasTipoEnum.AprovacaoFinanceira:
-        return PrestacaoContasSituacaoEnum.Aprovado
+        return "/api/prestacaocontas/aprovados?"
       default: null;
-
     }
   }
-
+  console.log(getTipoSituacao());
   const {
     data: dataFetch,
     error,
     mutate,
     isValidating,
   } = useFetch<PrestacaoContasPagination>(
-    `/api/prestacaocontas?${params}&idSituacao=${getTipoSituacao()}&page=${
+    `${getTipoSituacao()}page=${
       pageIndex + 1
     }&size=${pageSize}`,
     {
       initialData,
       revalidateOnReconnect: true,
     }
-
   )
 
   const { immutableValue: errorPrev, updateValue } = useImmutableValue(error)
@@ -221,8 +221,6 @@ const TablePrestacaoContas = ({
     ModalEnum.filterPrestacaoContas,
     'prestacaoContas_filtro_id'
   )
-
-
 
   useEffect(() => {
     if (dataFetch) {

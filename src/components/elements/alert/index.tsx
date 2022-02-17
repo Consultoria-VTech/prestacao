@@ -17,7 +17,7 @@ type AlertProps = {
 
 const optionsDefault: ToastOptions = {
   containerId: TOAST_CONTAINER.modal,
-  autoClose: 3000,
+  autoClose: 6000,
 }
 
 const Alert = ({
@@ -95,7 +95,7 @@ export const alertUpdateSuccess = (
   Alert({
     type: 'success',
     title: message || messageUpdateSuccess,
-    option: { containerId, autoClose: false },
+    option: { containerId, autoClose: 5000 },
   })
 
 export const alertDeleteSuccess = (

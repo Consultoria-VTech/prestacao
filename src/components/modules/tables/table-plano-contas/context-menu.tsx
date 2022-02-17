@@ -74,11 +74,11 @@ const ContextMenuPlanoContas = <T extends object = any>({
         onClick: handleItemClick,
         title: 'Consultar',
       },
-      {
-        id: ActionEnum.delete,
-        onClick: handleItemClick,
-        title: 'Excluir',
-      },
+      // {
+      //   id: ActionEnum.delete,
+      //   onClick: handleItemClick,
+      //   title: 'Excluir',
+      // },
     ],
     [onItemClick]
   )

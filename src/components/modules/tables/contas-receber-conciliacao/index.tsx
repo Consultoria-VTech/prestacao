@@ -306,7 +306,7 @@ const TableContasReceberConciliacao: React.FC<InitialData<ContasReceberPaginatio
       
       var pagination = dataFetch?.pagination
       let dataFetchFiltered =  (dataFetch?.data || []).filter(row => {
-        if(row.status == 'PAGO') {
+        if(row.status == 'PAGO' || row.emitido == 'NAO') {
           pagination.total--
           return false
         }

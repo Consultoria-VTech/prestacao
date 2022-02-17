@@ -114,12 +114,11 @@ export const estornarContasReceber = async (
 
 export const emitirNfsContasReceber = async (
   idContaReceber: number,
-  idContaBancaria: number,
 
 ): Promise<ContasReceber | ErrorData> => {  
   const response = await Api.put<ContasReceber>('/api/contasreceber/emitir', {
-    idContaReceber,
-    idContaBancaria,
+    idContaReceber ,
+    //idContaBancaria,
   })
 
   return response.data

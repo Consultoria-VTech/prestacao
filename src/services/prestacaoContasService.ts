@@ -39,13 +39,14 @@ export const alterarSituacao = async (
 }
 
 export const deletar = async (
-  prestacao: PrestacaoContas
-): Promise<boolean | ErrorData> => {
-  const response = await Api.delete<boolean>('/api/prestacaocontas', {
-    params: {
+  prestacao: PrestacaoContas,
+): Promise<PrestacaoContas | ErrorData> => {
+  const response = await Api.put<PrestacaoContas>(
+    '/api/prestacaocontas/excluir',
+    {
       id: prestacao.id,
-    },
-  })
+    }
+  )
 
   return response.data
 }

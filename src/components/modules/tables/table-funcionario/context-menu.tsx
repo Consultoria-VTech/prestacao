@@ -46,7 +46,7 @@ const ContextMenuFuncionario = <T extends object = any>({
         fator: formatDecimal(original.fator as number, 2),
       }
 
-      const action = event.currentTarget.id as ActionEnum
+      const action = event.currentTarget.id as ActionEnum | 'vincular'
       switch (action) {
         case ActionEnum.update:
           openModal(ModalEnum.createFuncionario, funcionario, {
@@ -68,6 +68,11 @@ const ContextMenuFuncionario = <T extends object = any>({
         case ActionEnum.read:
           openModal(ModalEnum.createFuncionario, funcionario)
           break
+        case 'vincular':
+          openModal(ModalEnum.vincularUsuario, funcionario, {
+            action: 'update',
+          })
+          break
       }
     },
     [onItemClick]
@@ -75,6 +80,11 @@ const ContextMenuFuncionario = <T extends object = any>({
 
   const contextMenuItems = useMemo<ContextMenuItem<Funcionario, any>[]>(
     () => [
+      {
+        id: 'vincular',
+        onClick: handleItemClick,
+        title: 'Vincular Usuário',
+      },
       {
         id: ActionEnum.update,
         onClick: handleItemClick,

@@ -1,4 +1,4 @@
-import { Fornecedor } from '../types/models/fornecedor'
+import { Fornecedor, FornecedorFiltro } from '../types/models/fornecedor'
 import Api, { ErrorData } from './api/api'
 import { ApiFornecedor } from './api/fornecedor'
 
@@ -39,11 +39,20 @@ export const alterar = async (
 export const deletar = async (
   fornecedor: Fornecedor
 ): Promise<boolean | ErrorData> => {
-  const response = await Api.delete<boolean>('/api/fornecedores', {
-    params: {
+  const response = await Api.put<boolean>('/api/fornecedores/apagar',
+    {
       id: fornecedor.id,
     },
-  })
+  )
 
   return response.data
+}
+
+
+export const consultar = async (
+  fornecedor: FornecedorFiltro
+): Promise<Fornecedor[] | ErrorData > => {
+  const response = await Api.post<Fornecedor>('/api/fornecedores/consultar', fornecedor)
+
+  return response.data as Fornecedor[];
 }

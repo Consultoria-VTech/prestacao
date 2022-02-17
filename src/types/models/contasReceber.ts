@@ -1,6 +1,6 @@
 import { DataPagination } from '../dataPagination'
 import { Cliente } from './cliente'
-import { ContaBancaria } from './contaBancaria'
+import { ContaBancaria, idcontaBancaria } from './contaBancaria'
 import { Contrato } from './contrato'
 import { Empresa } from './empresa'
 import { PlanoContas } from './planoContas'
@@ -34,10 +34,10 @@ export type ContasReceber = {
   comprovante?: any
   possuiComprovante?: boolean
   emitido?: EmitirNfsContasReceberSituacao
-  contasreceber?: number
+  contasreceber?: ContasReceber
   situacao?: ContasReceberSituacao
   idcrbaixa?: ContasReceberBaixa
-  idcontaBancaria?: number
+  idcontaBancaria?: idcontaBancaria
   valorConciliado?: number | string
   valorParcela?: number
   idplanodecontas?: number

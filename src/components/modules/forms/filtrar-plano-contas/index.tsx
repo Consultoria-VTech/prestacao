@@ -16,6 +16,7 @@ import { FormGroupInput, FormGroupSelect } from '../../form-group/index'
 import { ModalFooter } from '../../modal'
 import { alertError } from './../../../elements/alert/index'
 import { dataForm } from './formData'
+import { consultar } from '../../../../services/planoContasService'
 
 const FormFiltrarPlanoContas: React.FC = () => {
   const idModal = ModalEnum.filterPlanoContas
@@ -24,7 +25,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
   const { immutableValue: dataModal } = useImmutableValue(getData())
 
   const { data: dataFetch } = useFetch<PlanoContas[]>(
-    `/api/planocontas/consultarTodosResumido`,
+    `/api/planocontas/consultar`,
     {
       revalidateOnReconnect: true,
       onError: error => {
@@ -37,12 +38,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
   const [status, setStatus] = useState(BUTTON_STATE.NOTHING)
 
   const initialValues: PlanoContasFiltro = dataModal || {
-    idEmpresa: null,
-    id: null,
     descricao: '',
-    ativo: null,
-    idPlanoContasSintetica: null,
-    receitaOuDespesa: null,
   }
 
   const {
@@ -78,12 +74,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
 
   // #region FORM DATA
   const {
-    idempresa,
-    id,
     descricao,
-    ativo,
-    idPlanoContasSintetica,
-    receitaOuDespesa,
   } = dataForm({
     touched,
     errors,
@@ -104,15 +95,15 @@ const FormFiltrarPlanoContas: React.FC = () => {
         <div className="col-md-12">
           <FormLabel>Filtros</FormLabel>
           <div className="row">
-            <FormGroupInput
+            {/* <FormGroupInput
               field={id}
               required
               classNameFormGroup="col-md-12"
               type="text"
               mask="number"
               label="Código"
-            />
-            <FormGroupSelect
+            /> */}
+            {/* <FormGroupSelect
               field={idPlanoContasSintetica}
               required
               value={idPlanoContasSintetica.field.value}
@@ -136,7 +127,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
                     </option>
                   )
                 })}
-            </FormGroupSelect>
+            </FormGroupSelect> */}
             <FormGroupInput
               field={descricao}
               required
@@ -144,7 +135,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
               type="text"
               label="Descrição"
             />
-            <FormGroupSelect
+            {/* <FormGroupSelect
               field={receitaOuDespesa}
               required
               value={receitaOuDespesa.field.value}
@@ -166,7 +157,7 @@ const FormFiltrarPlanoContas: React.FC = () => {
               <option value="">Todos</option>
               <option value="true">Sim</option>
               <option value="false">Não</option>
-            </FormGroupSelect>
+            </FormGroupSelect> */}
           </div>
         </div>
       </div>
@@ -176,7 +167,6 @@ const FormFiltrarPlanoContas: React.FC = () => {
           type="button"
           state={status}
           buttonSize="md"
-          disabled={!dataFetch}
           onClick={e => {
             e.preventDefault()
             if (!isSubmitting) handleSubmit()

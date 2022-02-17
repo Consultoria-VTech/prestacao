@@ -12,7 +12,7 @@ export const columns = (): Column<ContratoImposto>[] =>
         id: 'id',
       },
       {
-        Header: 'Imposto',
+        Header: 'Alíquota',
         accessor: data => data.imposto.descricao,
       },
       {

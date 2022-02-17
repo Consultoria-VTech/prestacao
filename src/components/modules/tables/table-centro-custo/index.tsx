@@ -7,6 +7,8 @@ import { BiPlusMedical } from 'react-icons/bi'
 import { RiFilter2Fill } from 'react-icons/ri'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { mutate as globalMutate } from 'swr'
+import { ErrorData } from '~/services/api/api'
+import { consultar } from '~/services/centroCustoService'
 import { useFetch } from '../../../../hooks/useFetch'
 import { managerModal, useModal } from '../../../../hooks/useModal'
 import { ModalEnum } from '../../../../types/enum/modalEnum'
@@ -90,6 +92,7 @@ const TableCentroCusto: React.FC<InitialData<CentroCustoPagination>> = ({
   )
 
   const params = objectToQueryUrl(filtros)
+  console.log(params)
   const {
     data: dataFetch,
     error,
@@ -122,6 +125,10 @@ const TableCentroCusto: React.FC<InitialData<CentroCustoPagination>> = ({
   const { idContextMenu, displayMenu, items } = ContextMenuBanco<CentroCusto>({
     onItemClick: deleteBanco,
   })
+
+  const filterResultSetData = async (values) : Promise<CentroCusto[] | ErrorData> => {
+    return await consultar(values)
+  }
 
   managerModal.on<CentroCusto>(
     'afterClose',
@@ -157,8 +164,14 @@ const TableCentroCusto: React.FC<InitialData<CentroCustoPagination>> = ({
     'afterClose',
     newValues => {
       if (newValues.props) {
-        updateRouter({ centroCustoFiltros: newValues.props })
-        setFiltros(newValues.props)
+        filterResultSetData(newValues.props).then((resultSetData : CentroCusto[]) => {
+          if(resultSetData){
+            console.log(resultSetData)
+            //setData(resultSetData || [])
+          }
+        })
+        // updateRouter({ centroCustoFiltros: newValues.props })
+        // setFiltros(newValues.props)
         updateComponent()
       }
     },
@@ -169,13 +182,13 @@ const TableCentroCusto: React.FC<InitialData<CentroCustoPagination>> = ({
   useEffect(() => {
     if (!_isEmpty(dataFetch)) {
       setData(dataFetch?.data || [])
-
+      console.log(dataFetch)
       if (dataFetch?.pagination) {
         setPageCount(dataFetch.pagination?.pageCount)
         setTotalItems(dataFetch.pagination?.total)
       }
     }
-  }, [dataFetch])
+  }, [dataFetch?.data])
 
   useEffect(() => {
     if (error && !_isEqual(error, errorPrev)) {
@@ -229,9 +242,10 @@ const TableCentroCusto: React.FC<InitialData<CentroCustoPagination>> = ({
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() =>
-            openModalFiltro(ModalEnum.filterCentroCusto, filtros, {
+            openModalFiltro(ModalEnum.filterCentroCusto, null, {
               action: 'filter',
               showButtonExpand: isExpandModalFilter,
+              
             })
           }>
           <RiFilter2Fill />

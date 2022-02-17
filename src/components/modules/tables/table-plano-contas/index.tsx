@@ -63,12 +63,12 @@ const TablePlanoContas: React.FC<InitialData<PlanoContasPagination>> = ({
     (router.query.receitaOuDespesa as string)?.toLowerCase() === 'true' || null
 
   const [filtros, setFiltros] = useState<PlanoContasFiltro>({
-    idEmpresa,
-    id,
-    idPlanoContasSintetica,
+    //idEmpresa,
+    //id,
+    //idPlanoContasSintetica,
     descricao,
-    ativo,
-    receitaOuDespesa,
+    //ativo,
+    //receitaOuDespesa,
   })
 
   const {
@@ -102,7 +102,7 @@ const TablePlanoContas: React.FC<InitialData<PlanoContasPagination>> = ({
     error,
     mutate,
     isValidating,
-  } = useFetch<PlanoContasPagination>(`/api/planocontas?${params}`, {
+  } = useFetch<PlanoContasPagination>(`/api/planocontas/`, {
     initialData,
     revalidateOnReconnect: true,
   })
@@ -215,13 +215,13 @@ const TablePlanoContas: React.FC<InitialData<PlanoContasPagination>> = ({
   return (
     <>
       <TableHeader>
-        <Button
+        {/* <Button
           type="button"
           className="btn btn-sm btn-primary"
           onClick={() => openModal(idModal, null, { action: 'create' })}>
           <BiPlusMedical />
           Cadastrar
-        </Button>
+        </Button> */}
         {/* <Button
           type="button"
           className="btn btn-sm btn-primary"

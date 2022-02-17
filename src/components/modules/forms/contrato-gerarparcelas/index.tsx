@@ -4,11 +4,9 @@ import { ErrorData } from '../../../../services/api/api'
 import { ModalEnum } from '../../../../types/enum/modalEnum'
 import { Contrato } from '../../../../types/models/contrato'
 import { useAuth } from '../../../../context/authContext'
-import { ContasReceber } from '../../../../types/models/contasReceber'
 import { TOAST_CONTAINER } from '../../../../util/constants'
 import { leftPad } from '../../../../util/stringUtil'
 import Alert, { alertError, alertUpdateSuccess } from '../../../elements/alert'
-import DatePickerCustom from '../../../elements/datePicker'
 import { FormLabel } from '../../../elements/label'
 import { ModalFooter } from '../../modal'
 import { useImmutableValue } from './../../../../hooks/useImmutableValue'
@@ -18,10 +16,7 @@ import Button, { BUTTON_STATE } from './../../../elements/button/index'
 import { FormGroupInput, FormGroupSelect } from './../../form-group/index'
 import { validation } from './validation'
 import { dataForm } from './formData'
-import { useFetch } from '../../../../hooks/useFetch'
 import { format } from 'date-fns'
-import { formatNumberPtBrToUs } from './../../../../util/numberUtil'
-import { PlanoContas } from '~/types/models/planoContas'
 
 const FormGerarParcelasContrato: React.FC = () => {
   const { closeModal, getData, getAction } = useModal<Contrato>(
@@ -61,6 +56,7 @@ const FormGerarParcelasContrato: React.FC = () => {
     status: null,
     nparcelas: null,
     tipo: null,
+    parcelas: null
   }
 
   const validationSchema = validation()
@@ -85,8 +81,8 @@ const FormGerarParcelasContrato: React.FC = () => {
     onSubmit: async values => {
       var metodo = '';
       var valorParcela
-      var converteValor = parseFloat(values.valor.replace(","," "))
-       
+      var converteValor = parseFloat(values.valor.replace(".", ""))
+      
 
       if (values.tipo == 'CP') { 
         metodo = 'contaspagar/gerarparcelas'  
@@ -95,34 +91,40 @@ const FormGerarParcelasContrato: React.FC = () => {
         try {
           setSubmitting(true)
           setStatus(BUTTON_STATE.LOADING)
+          Alert({
+            title: 'Atenção',
+            body: 'Geração de parcelas de contratos de Contas a Pagar, precisa ser lançado manualmente',
+            type: 'info',
+          })
   
-          values.dtEmissao = format(values.dtEmissao as Date, 'yyyy-MM-dd hh:mm:ss'),
-          values.dtVencimento = format(values.dtVencimento as Date, 'yyyy-MM-dd hh:mm:ss'),
+          // values.dtEmissao = format(values.dtEmissao as Date, 'yyyy-MM-dd hh:mm:ss'),
+          // values.dtVencimento = format(values.dtVencimento as Date, 'yyyy-MM-dd hh:mm:ss'),
+          // values.valor = dataModal.valor.replace(".","").replace(",",".")
           
-          await gerarParcelasContratoPagar(
-            values.empresa.id = dataModal.empresa.id,
-            values.fornecedor.id = dataModal.fornecedor.id,
-            values.id = dataModal.id,
-            values.valor = dataModal.valor,
-            values.dtEmissao = dataModal.dtEmissao as Date,
-            values.dtVencimento = dataModal.dtVencimento as Date,
-            values.nparcelas = dataModal.nparcelas,
-            valorParcela = valorParcela,
-            metodo = metodo
-          )
-            .then(data => {
-              alertUpdateSuccess(
-                TOAST_CONTAINER.modal,
-                'Conta a receber estornada com sucesso!'
-              )
-              setContrato(data as Contrato)
-              setStatus(BUTTON_STATE.SUCCESS)
-            })
+          // await gerarParcelasContratoPagar(
+          //   values.empresa.id = dataModal.empresa.id,
+          //   values.fornecedor.id = dataModal.fornecedor.id,
+          //   values.id = dataModal.id,
+          //   values.valor = dataModal.valor,
+          //   values.dtEmissao = dataModal.dtEmissao as Date,
+          //   values.dtVencimento = dataModal.dtVencimento as Date,
+          //   values.nparcelas = dataModal.nparcelas,
+          //   valorParcela = valorParcela,
+          //   metodo = metodo
+          // )
+          //   .then(data => {
+          //     alertUpdateSuccess(
+          //       TOAST_CONTAINER.modal,
+          //       'Conta a receber estornada com sucesso!'
+          //     )
+          //     setContrato(data as Contrato)
+          //     setStatus(BUTTON_STATE.SUCCESS)
+          //   })
   
-            .catch((e: ErrorData) => {
-              alertError(e, TOAST_CONTAINER.modal)
-              setStatus(BUTTON_STATE.ERROR)
-            })
+            // .catch((e: ErrorData) => {
+            //   alertError(e, TOAST_CONTAINER.modal)
+            //   setStatus(BUTTON_STATE.ERROR)
+            // })
   
           setSubmitting(false)
         } catch (e) {
@@ -146,6 +148,8 @@ const FormGerarParcelasContrato: React.FC = () => {
 
           values.dtEmissao = format(values.dtEmissao as Date, 'yyyy-MM-dd hh:mm:ss')
           values.dtVencimento = format(values.dtVencimento as Date, 'yyyy-MM-dd hh:mm:ss')
+          values.valor = dataModal.valor.replace(".","").replace(",",".")
+          
 
           await gerarParcelasContratoReceber(
             values.empresa.id = dataModal.empresa.id,
@@ -161,7 +165,7 @@ const FormGerarParcelasContrato: React.FC = () => {
             .then(data => {
               alertUpdateSuccess(
                 TOAST_CONTAINER.modal,
-                'Conta a receber estornada com sucesso!'
+                'Parcelas geradas com sucesso!'
               )
               setContrato(data as Contrato)
               setStatus(BUTTON_STATE.SUCCESS)
@@ -215,7 +219,7 @@ const FormGerarParcelasContrato: React.FC = () => {
               value={leftPad(dataModal?.id, 6)}
               classNameFormGroup="col-md-12"
               type="text"
-              label="Código Conta a Receber"
+              label="Código"
               readOnly={true}
             />
             {/* <FormGroupSelect

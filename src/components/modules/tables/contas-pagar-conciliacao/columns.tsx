@@ -55,7 +55,7 @@ export const columns = (): Column<ContasPagar>[] =>
       // },
       {
         Header: 'Valor Parcela',
-        accessor: data => data.valorParcela && formatMoney(data.valorParcela as number),
+        accessor: data => data.valorParcela && formatMoney(data.valor as number),
       },
       {
         Header: 'Valor Pago',

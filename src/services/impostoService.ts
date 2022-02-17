@@ -20,11 +20,11 @@ export const alterar = async (
 export const deletar = async (
   imposto: Imposto
 ): Promise<boolean | ErrorData> => {
-  const response = await Api.delete<boolean>('/api/impostos', {
-    params: {
+  const response = await Api.put<boolean>('/api/impostos/apagar', 
+    {
       id: imposto.id,
     },
-  })
+  )
 
   return response.data
 }

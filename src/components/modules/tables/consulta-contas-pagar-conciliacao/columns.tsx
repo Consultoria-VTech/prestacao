@@ -38,7 +38,7 @@ export const columns = (): Column<ContasPagar>[] =>
       },
       {
         Header: 'Código CP',
-        accessor: data => leftPad(data.contasPagar, 6),
+        accessor: data => leftPad(data.contasPagar.id, 6),
       },
       {
         Header: 'Valor Pago',
@@ -53,7 +53,9 @@ export const columns = (): Column<ContasPagar>[] =>
       },
       {
         Header: 'Banco',
-        accessor: data => data.idcontaBancaria
+        accessor: data =>
+          data.idcontaBancaria &&
+          `${data?.idcontaBancaria?.agencia}-${data?.idcontaBancaria?.agenciaDv} - ${data?.idcontaBancaria?.banco?.name}`,
       },
       {
         Header: 'Situação',

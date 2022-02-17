@@ -341,7 +341,7 @@ const FormCadastrarContasReceber: React.FC = () => {
                   p =>
                     !p.root &&
                     (p.ativo || p.id === planoContas.field.value.id) &&
-                    p.nivel >= 2 &&
+                    p.nivel >= 3 &&
                     !p.receitaOuDespesa
                 )
                 .map(item => {

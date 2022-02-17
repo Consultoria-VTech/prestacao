@@ -35,6 +35,9 @@ import TableHeader from '../../../elements/table-header/index'
 import TablePagination from '../../../elements/table-pagination'
 import { columns } from './columns'
 import ContextMenuContrato from './context-menu'
+import { consultar } from '../../../../services/contratoService'
+import { ErrorData } from '~/services/api/api'
+
 
 type QueryPageContratoes = {
   page?: string
@@ -138,6 +141,10 @@ const TableContrato: React.FC<InitialData<ContratoPagination>> = ({
     onItemClick: deleteContrato,
   })
 
+  const filterResultSetData = async (values) : Promise<Contrato[] | ErrorData> => {
+    return await consultar(values)
+  }
+
   managerModal.on<Contrato>(
     'afterClose',
     newValues => {
@@ -170,8 +177,11 @@ const TableContrato: React.FC<InitialData<ContratoPagination>> = ({
     'afterClose',
     newValues => {
       if (newValues.props) {
-        updateRouter({ contratoFiltros: newValues.props })
-        setFiltros(newValues.props)
+        filterResultSetData(newValues.props).then((resultSetData : Contrato[]) => {
+          if(resultSetData){
+            setData(resultSetData)
+          }
+        })
         updateComponent()
       }
     },
@@ -240,7 +250,7 @@ const TableContrato: React.FC<InitialData<ContratoPagination>> = ({
   return (
     <>
       <TableHeader>
-        <Link href={`contratos/${idContratoSelecionado}/impostos`}>
+        {/* <Link href={`contratos/${idContratoSelecionado}/impostos`}>
           <a
             className="btn btn-sm btn-light btn-light-custom"
             onClick={e => {
@@ -259,8 +269,8 @@ const TableContrato: React.FC<InitialData<ContratoPagination>> = ({
             <RiPercentFill style={{ marginRight: '.2rem' }} />
             Impostos
           </a>
-        </Link>
-        <Link href={`contratos/${idContratoSelecionado}/responsaveis`}>
+        </Link> */}
+        {/* <Link href={`contratos/${idContratoSelecionado}/responsaveis`}>
           <a
             className="btn btn-sm btn-light btn-light-custom"
             onClick={e => {
@@ -279,7 +289,7 @@ const TableContrato: React.FC<InitialData<ContratoPagination>> = ({
             <FaUsers style={{ marginRight: '.2rem' }} />
             Responsáveis
           </a>
-        </Link>
+        </Link> */}
         <Button
           type="button"
           className="btn btn-sm btn-primary"

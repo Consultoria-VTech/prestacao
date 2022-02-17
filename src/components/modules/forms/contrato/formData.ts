@@ -17,6 +17,7 @@ type ContratoInputs = {
   status: FieldProps<string>
   nparcelas: FieldProps<number>
   tipo: FieldProps<ContratoTipoEnum>
+  parcelas: FieldProps<string>
 }
 
 export const dataForm = ({
@@ -92,6 +93,11 @@ export const dataForm = ({
       field: getFieldProps('tipo'),
       isInvalid:
         get(touched, 'tipo') && get(errors, 'tipo') && errors.tipo !== '',
+    },
+    parcelas: {
+      field: getFieldProps('parcelas'),
+      isInvalid:
+        get(touched, 'parcelas') && get(errors, 'parcelas') && errors.parcelas !== '',
     },
   }
 }

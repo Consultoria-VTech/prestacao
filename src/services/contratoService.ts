@@ -1,11 +1,11 @@
 import { Empresa } from '@types'
 import { NumeroParcelas } from '@utils'
 import { number } from '~/components/elements/input/mask'
-import { Contrato } from '../types/models/contrato'
+import { Contrato, ContratoFiltro } from '../types/models/contrato'
 import Api, { ErrorData } from './api/api'
 
 export const cadastrar = async (
-  contrato: Contrato
+  contrato: Contrato,
 ): Promise<Contrato | ErrorData> => {
   const response = await Api.post<Contrato>('/api/contratos', contrato)
 
@@ -23,11 +23,11 @@ export const alterar = async (
 export const deletar = async (
   contrato: Contrato
 ): Promise<boolean | ErrorData> => {
-  const response = await Api.delete<boolean>('/api/contratos', {
-    params: {
-      id: contrato.id,
+  const response = await Api.put<boolean>('/api/contratos/apagar',
+    {
+      idContrato: contrato.id,
     },
-  })
+  )
 
   return response.data
 }
@@ -86,4 +86,12 @@ export const gerarParcelasContratoPagar = async (
   })
 
   return response.data
+}
+
+export const consultar = async (
+  contrato: ContratoFiltro
+): Promise<Contrato[] | ErrorData > => {
+  const response = await Api.post<Contrato>('/api/contratos/consultar', contrato)
+
+  return response.data as Contrato[];
 }

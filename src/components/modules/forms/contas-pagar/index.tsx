@@ -114,7 +114,7 @@ const FormCadastrarContasPagar: React.FC = () => {
     dtVencimento: null,
     tipoDoc: null,
     nDoc: '',
-    nParcelas: '',
+    nParcelas: 1,
     comprovante: '',
   }
 
@@ -342,7 +342,7 @@ const FormCadastrarContasPagar: React.FC = () => {
                     !p.root &&
                     (p.ativo || p.id === planoContas.field.value.id) &&
                     p.nivel >= 2 &&
-                    p.receitaOuDespesa
+                    !p.receitaOuDespesa
                 )
                 .map(item => {
                   return (

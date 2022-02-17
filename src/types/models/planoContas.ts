@@ -20,12 +20,7 @@ export type PlanoContas = {
 }
 
 export type PlanoContasFiltro = {
-  idEmpresa?: number
-  id?: number
-  idPlanoContasSintetica?: number
   descricao?: string
-  receitaOuDespesa?: boolean | 0 | 1 | -1 | null
-  ativo?: boolean | 0 | 1 | -1 | null
 }
 
 export type PlanoContasPagination = {

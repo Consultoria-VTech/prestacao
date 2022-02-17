@@ -26,10 +26,14 @@ import Alert, {
   alertDeleteSuccess,
   alertError,
 } from '../../../elements/alert/index'
+import { useAuth } from '@context'
 
 type ContextMenuPrestacaoDespesaProps<T = any> = ContextMenuCustomProps<T> & {
-  tipo: PrestacaoContasSituacaoEnum
+  tipo?: PrestacaoContasSituacaoEnum,
+  onItemClick?: <D = T>(id: ActionEnum | string, data: D) => void
 }
+
+
 const ContextMenuPrestacaoDespesa = <T extends object = any>({
   onItemClick,
   tipo,
@@ -41,6 +45,8 @@ const ContextMenuPrestacaoDespesa = <T extends object = any>({
   const { show } = useContextMenu({
     id: ContextMenuEnum.menuPrestacaoDespesa,
   })
+
+  const { user } = useAuth()
 
   const displayMenu = ({
     e,
@@ -165,6 +171,7 @@ const ContextMenuPrestacaoDespesa = <T extends object = any>({
       },
     ]
 
+
     if (tipo !== PrestacaoContasSituacaoEnum.Aberto && 
       tipo !== PrestacaoContasSituacaoEnum.Reprovado &&
       tipo !== PrestacaoContasSituacaoEnum.Finalizado &&
@@ -180,11 +187,21 @@ const ContextMenuPrestacaoDespesa = <T extends object = any>({
 
       if(tipo === PrestacaoContasSituacaoEnum.AprovacaoAdministrador)
       {
-        return array.filter(
-          p =>
-            p.id !== ActionEnum.update &&
-            p.id !== ActionEnum.delete
-        )
+        if(user.usuarioTipo.idUsuarioTipo === 2){
+          return array.filter(
+            p =>
+              p.id !== 'aprovar' &&
+              p.id !== ActionEnum.update &&
+              p.id !== ActionEnum.delete
+          )
+        }
+        else{
+          return array.filter(
+            p =>
+              p.id !== ActionEnum.update &&
+              p.id !== ActionEnum.delete
+          )
+        }    
       }
 
       if(tipo === PrestacaoContasSituacaoEnum.Aberto)
@@ -204,6 +221,8 @@ const ContextMenuPrestacaoDespesa = <T extends object = any>({
             p.id !== ActionEnum.delete
         )
       }
+
+
 
     
 

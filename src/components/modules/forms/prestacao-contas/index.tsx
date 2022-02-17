@@ -16,6 +16,7 @@ import {
 import { TOAST_CONTAINER } from '@utils'
 import { useFormik } from 'formik'
 import { useState } from 'react'
+import { date } from 'yup/lib/locale'
 import { FormLabel } from '~/components/elements'
 import Alert from '~/components/elements/alert'
 import Button from '~/components/elements/button'
@@ -26,6 +27,9 @@ import { FormGroupInput, FormGroupSelect } from '../../form-group'
 import { ModalFooter } from '../../modal'
 import { dataForm } from './formData'
 import { validation } from './validation'
+import { format } from 'date-fns'
+import pt from 'date-fns/locale/pt-BR'
+
 export const FormCadastrarPrestacaoContas = () => {
   const { closeModal, getData, getAction } = useModal<PrestacaoContas>(
     ModalEnum.createPrestacaoContas
@@ -43,7 +47,7 @@ export const FormCadastrarPrestacaoContas = () => {
 
   const initialValues: PrestacaoContas = dataModal || {
     id: null,
-    observacao: null,
+    observacao: "",
     empresa: user.empresa,
     projeto: { id: null },
     dtEmissao: null,
@@ -90,6 +94,8 @@ export const FormCadastrarPrestacaoContas = () => {
               alertCreateSuccess()
               setPrestacaoContas(data as PrestacaoContas)
               setStatus(BUTTON_STATE.SUCCESS)
+              console.log("new data", new Date())
+              console.log("current data", values.dtEmissao)
             })
             .catch((e: ErrorData) => {
               alertError(e, TOAST_CONTAINER.modal)
@@ -132,7 +138,7 @@ export const FormCadastrarPrestacaoContas = () => {
   )
 
   const { data: dataFuncionario } = useFetch<Funcionario[]>(
-    `/api/funcionarios/consultar`,
+    `/api/funcionarios/consultarLogado`,
     {
       revalidateOnReconnect: true,
       onError: error => {
@@ -215,13 +221,13 @@ export const FormCadastrarPrestacaoContas = () => {
               onBlur={dtEmissao.field.onBlur}
               isInvalid={dtEmissao.isInvalid}
               messageError={errors.dtEmissao}
-              readOnly={readOnly}
+              readOnly={false}
               value={dtEmissao.field.value}
               name={dtEmissao.field.name}
               popperPlacement="auto"
               onChange={date => setFieldValue(dtEmissao.field.name, date)}
             />
-            <FormGroupSelect
+            {/* <FormGroupSelect
               field={situacao}
               required
               value={situacao.field.value}
@@ -246,7 +252,7 @@ export const FormCadastrarPrestacaoContas = () => {
                     </option>
                   )
                 })}
-            </FormGroupSelect>
+            </FormGroupSelect> */}
             <FormGroupInput
               field={observacao}
               required
@@ -261,14 +267,36 @@ export const FormCadastrarPrestacaoContas = () => {
       </div>
 
       <ModalFooter className="mt-4 py-0 pt-3">
-        {!readOnly && (
+        {!readOnly && propsModal?.action === 'update' && (
           <Button
             type="button"
             state={status}
             onSucess={() => {
+              location.reload();
               handleReset(null)
               closeModal(ModalEnum.createPrestacaoContas, prestacaoContas)
               // fetchData({ pageSize: pageSize, pageIndex: pageIndex })
+              setStatus(BUTTON_STATE.NOTHING)
+            }}
+            buttonSize="md"
+            disabled={isValidating && !funcionario.field.value?.id}
+            onClick={e => {
+              e.preventDefault()
+              if (!isSubmitting) handleSubmit()
+            }}
+            className="btn btn-primary ms-auto">
+            Salvar
+          </Button>
+        )}
+        {!readOnly && propsModal?.action !== 'aprovar' && propsModal?.action !== 'update' &&(
+          <Button
+            type="button"
+            state={status}
+            onSucess={() => {
+              location.reload();
+              handleReset(null)
+              closeModal(ModalEnum.createPrestacaoContas, prestacaoContas)
+              //fetchData({ pageSize: pageSize, pageIndex: pageIndex })
               setStatus(BUTTON_STATE.NOTHING)
             }}
             buttonSize="md"

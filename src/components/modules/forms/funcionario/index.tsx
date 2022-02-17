@@ -21,7 +21,7 @@ import Alert, {
 } from './../../../elements/alert/index'
 import Button, { BUTTON_STATE } from './../../../elements/button/index'
 import Checkbox from './../../../elements/checkbox/index'
-import { FormGroupInput } from './../../form-group/index'
+import { FormGroupInput, FormGroupSelect } from './../../form-group/index'
 import { dataForm } from './formData'
 import { FormCadastrarFuncionarioStyled } from './styles'
 import { validation } from './validation'
@@ -203,7 +203,6 @@ const FormCadastrarFuncionario: React.FC = () => {
               readOnly={readOnly}
               messageError={errors.nome}
             />
-
             <FormGroupInput
               field={cpf}
               required
@@ -259,29 +258,7 @@ const FormCadastrarFuncionario: React.FC = () => {
               readOnly={readOnly}
               messageError={errors.telefone}
             />
-
-            <DatePickerCustom
-              className="col-md-3"
-              label="Data Admissão"
-              onBlur={dtAdmissao.field.onBlur}
-              isInvalid={dtAdmissao.isInvalid}
-              messageError={errors.dtAdmissao}
-              readOnly={readOnly}
-              value={dtAdmissao.field.value}
-              name={dtAdmissao.field.name}
-              onChange={date => setFieldValue(dtAdmissao.field.name, date)}
-            />
-            <DatePickerCustom
-              className="col-md-3"
-              label="Data Demissão"
-              onBlur={dtDemissao.field.onBlur}
-              isInvalid={dtDemissao.isInvalid}
-              messageError={errors.dtDemissao}
-              readOnly={readOnly}
-              value={dtDemissao.field.value}
-              name={dtDemissao.field.name}
-              onChange={date => setFieldValue(dtDemissao.field.name, date)}
-            />
+            <hr /> 
             <div className="form-group">
               <Checkbox
                 label="Ativo"
@@ -301,6 +278,28 @@ const FormCadastrarFuncionario: React.FC = () => {
                 onBlur={ativo.field.onBlur}
               />
             </div>
+            <DatePickerCustom
+              className="col-md-3"
+              label="Data Admissão"
+              onBlur={dtAdmissao.field.onBlur}
+              isInvalid={dtAdmissao.isInvalid}
+              messageError={errors.dtAdmissao}
+              readOnly={readOnly || ativo.field.value === false}
+              value={dtAdmissao.field.value }
+              name={dtAdmissao.field.name}
+              onChange={date => setFieldValue(dtAdmissao.field.name, date)}
+            />
+            <DatePickerCustom
+              className="col-md-3"
+              label="Data Demissão"
+              onBlur={dtDemissao.field.onBlur}
+              isInvalid={dtDemissao.isInvalid}
+              messageError={errors.dtDemissao}
+              readOnly={readOnly || ativo.field.value === true}
+              value={dtDemissao.field.value}
+              name={dtDemissao.field.name}
+              onChange={date => setFieldValue(dtDemissao.field.name, date)}
+            />
           </div>
         </div>
 

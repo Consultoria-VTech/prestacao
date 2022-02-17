@@ -65,6 +65,7 @@ export const useModalManager = <T>(
   id: string,
   defaultProps = defaultModalProps
 ): ModalData<T> => {
+
   const idModal = id
   const [, update] = useState<number>(0)
   const [props, setProps] = useState<ModalProps>(defaultProps)
@@ -158,6 +159,5 @@ export const useModalManager = <T>(
 
 export const useModal = <T>(id?: string, props?: ModalProps): ModalData<T> => {
   const data = useModalManager<T>(managerModal, id, props)
-
   return data
 }
