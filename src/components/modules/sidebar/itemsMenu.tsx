@@ -366,13 +366,13 @@ export const items: SidebarItem[] = [
           }
         ]
       },
-      {
-        id: '71',
-        name: 'Time Sheet',
-        link: '/timesheet',
-        priority: true,
-        disabled: true,
-      },
+      // {
+      //   id: '71',
+      //   name: 'Time Sheet',
+      //   link: '/timesheet',
+      //   priority: true,
+      //   disabled: true,
+      // },
       // {
       //   id: '73',
       //   name: 'CRM',

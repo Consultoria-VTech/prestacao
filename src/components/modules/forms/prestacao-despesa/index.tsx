@@ -518,6 +518,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
             type="button"
             state={status}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
               // fetchData({ pageSize: pageSize, pageIndex: pageIndex })
