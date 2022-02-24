@@ -29,6 +29,7 @@ import { dataForm } from './formData'
 import { validation } from './validation'
 import { format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
+import  Router  from 'next/router'
 
 export const FormCadastrarPrestacaoContas = () => {
   const { closeModal, getData, getAction } = useModal<PrestacaoContas>(
@@ -221,7 +222,7 @@ export const FormCadastrarPrestacaoContas = () => {
               onBlur={dtEmissao.field.onBlur}
               isInvalid={dtEmissao.isInvalid}
               messageError={errors.dtEmissao}
-              readOnly={false}
+              readOnly={readOnly}
               value={dtEmissao.field.value}
               name={dtEmissao.field.name}
               popperPlacement="auto"
@@ -277,6 +278,7 @@ export const FormCadastrarPrestacaoContas = () => {
               closeModal(ModalEnum.createPrestacaoContas, prestacaoContas)
               // fetchData({ pageSize: pageSize, pageIndex: pageIndex })
               setStatus(BUTTON_STATE.NOTHING)
+              
             }}
             buttonSize="md"
             disabled={isValidating && !funcionario.field.value?.id}
@@ -293,7 +295,9 @@ export const FormCadastrarPrestacaoContas = () => {
             type="button"
             state={status}
             onSucess={() => {
-              location.reload();
+              Router.push(
+                `/gestao/cadastros/prestacaocontas/${prestacaoContas.id}/despesas`
+              )
               handleReset(null)
               closeModal(ModalEnum.createPrestacaoContas, prestacaoContas)
               //fetchData({ pageSize: pageSize, pageIndex: pageIndex })

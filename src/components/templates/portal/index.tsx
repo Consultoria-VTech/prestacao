@@ -298,28 +298,29 @@ const PortalTemplate: React.FC = () => {
           <BoxChartsStyled>
             <h2>Prestação de Contas</h2>
             {/* <Chart options={options} series={series} type="bar" height="400rem" />  */}
-            <img
+            <Chart options={options} series={series} type="bar" height="400rem" /> 
+            {/* <img
                     src="/img/teste.png"
                     alt="VTech Consultoria"
-                    width="700px"
+                    width="100%"
                     height="400px"
                     // loading="eager"
                     // className="navbar-brand-img"
-            />
+            /> */}
           </BoxChartsStyled>
         </div>
         <div className="col-md-6"> 
           <BoxChartsStyled>
             <h2>Despesas</h2>
-            {/* <Chart options={options} series={series} type="bar" height="400rem" />  */}
-            <img
+            <Chart options={options} series={series} type="bar" height="400rem" /> 
+            {/* <img
                     src="/img/teste.png"
                     alt="VTech Consultoria"
-                    width="700px"
+                    width="100%"
                     height="400px"
                     // loading="eager"
                     // className="navbar-brand-img"
-            />
+            /> */}
           </BoxChartsStyled>
         </div>
       </BoxChartsContentStyled>

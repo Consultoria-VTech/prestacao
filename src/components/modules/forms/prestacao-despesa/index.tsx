@@ -49,6 +49,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
   })
   const { immutableValue: dataModal } = useImmutableValue(getData())
   const readOnly = propsModal?.action === 'read'
+  const ap = propsModal?.action === 'aprovar'
   const [prestacaoDespesa, setPrestacaoDespesa] = useState<PrestacaoDespesa>()
   const { user } = useAuth()
 
@@ -314,7 +315,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 data-validate= "Campo Obrigatório">
                 <Select
                   className={`form-control col-md-12 ${validoDescricao && salvando ? 'pe-2-25 is-invalid' : ''}`}
-                  disabled={readOnly}
+                  disabled={readOnly || ap}
                   onChange={e => setFieldValue("descricao", e.target.value)}
                   value={descricao.field.value || null}
                   name="descricao">
@@ -344,7 +345,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               data-validate= "Campo Obrigatório">
                 <Input
                   className={`form-control col-md-6 ${validoValor && salvando ? 'pe-2-25 is-invalid' : ''}`}
-                  readOnly={readOnly}
+                  readOnly={readOnly || ap}
                   required
                   placeholder="0,00"
                   type="text"
@@ -365,7 +366,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                   onBlur={dtDespesa.field.onBlur}
                   isInvalid={dtDespesa.isInvalid}
                   messageError={errors.dtDespesa}
-                  readOnly={readOnly}
+                  readOnly={readOnly || ap}
                   value={dtDespesa.field.value}
                   name={dtDespesa.field.name}
                   popperPlacement="auto"
@@ -380,7 +381,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                             classNameFormGroup="col-md-3"
                             type="text"
                             label="KM Rodados"
-                            readOnly={readOnly}
+                            readOnly={readOnly || ap}
                             messageError={errors.quilometragem}
                           />
             )
@@ -396,7 +397,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 data-validate= "Campo Obrigatório">
                 <Select
                   className={`form-control col-md-12 ${validoTipoReembolso && salvando ? 'pe-2-25 is-invalid' : ''}`}
-                  disabled={readOnly}
+                  disabled={readOnly || ap}
                   onChange={e => setFieldValue("tipoReembolso", e.target.value)}
                   value={tipoReembolso.field.value || null}
                   name="tipoReembolso">
@@ -449,7 +450,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               classNameFormGroup="col-md-12"
               type="text"
               label="Observação"
-              readOnly={readOnly}
+              readOnly={readOnly || ap}
               messageError={errors.observacao}
             />
 
@@ -472,8 +473,8 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 onBlur={comprovante.field.onBlur}
                 isInvalid={comprovante.isInvalid}
                 name={comprovante.field.name}
-                readOnly={readOnly}
-                containerVisible={!readOnly}
+                readOnly={readOnly || ap}
+                containerVisible={!readOnly || !ap}
                 accept={['image/*', 'application/pdf', '.doc', '.docx']}
                 messageError={errors.comprovante?.toString()}
                 loading={!readOnly && 
@@ -499,8 +500,8 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 onBlur={comprovante.field.onBlur}
                 isInvalid={comprovante.isInvalid}
                 name={comprovante.field.name}
-                readOnly={readOnly}
-                containerVisible={!readOnly}
+                readOnly={readOnly || ap}
+                containerVisible={!readOnly || !ap}
                 accept={['image/*', 'application/pdf', '.doc', '.docx']}
                 messageError={errors.comprovante?.toString()}
                 loading={data?.data}
@@ -544,6 +545,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
             type="button"
             state={status}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
               // fetchData({ pageSize: pageSize, pageIndex: pageIndex })
@@ -572,8 +574,9 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               type="button"
               state={statusAprovar}
               onSucess={() => {
+                location.reload()
                 handleReset(null)
-                closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
+                //closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
                 setStatusAprovar(BUTTON_STATE.NOTHING)
               }}
               buttonSize="md"
@@ -592,6 +595,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               type="button"
               state={statusReprovar}
               onSucess={() => {
+                location.reload()
                 handleReset(null)
                 closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
                 setStatusReprovar(BUTTON_STATE.NOTHING)
