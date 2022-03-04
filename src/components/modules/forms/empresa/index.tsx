@@ -391,6 +391,7 @@ const FormCadastrarEmpresa: React.FC = () => {
             type="button"
             state={success}
             onSucess={() => {
+              location.reload()
               handleReset(null)
               closeModal(ModalEnum.createEmpresa, empresa)
               // fetchData({ pageSize: pageSize, pageIndex: pageIndex })

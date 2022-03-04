@@ -9,7 +9,7 @@ import {
   PrestacaoDespesaStatus,
   PrestacaoDespesaTipoReembolso,
 } from '@types'
-import { formatNumberPtBrToUs, getFilename, TOAST_CONTAINER } from '@utils'
+import {getFilename, TOAST_CONTAINER } from '@utils'
 import { useFormik } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormLabel } from '~/components/elements'
@@ -33,7 +33,6 @@ import { dataForm } from './formData'
 import { validation } from './validation'
 import DatePickerCustom from '~/components/elements/datePicker'
 import DatePickerCustomDespesa from '~/components/elements/datePicker-despesa'
-
 import { format } from 'date-fns'
 import Select from '~/components/elements/select'
 import Input from '~/components/elements/input'
@@ -52,7 +51,6 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
   const ap = propsModal?.action === 'aprovar'
   const [prestacaoDespesa, setPrestacaoDespesa] = useState<PrestacaoDespesa>()
   const { user } = useAuth()
-
 
   const { data } = useFetch(
     dataModal?.id && `/api/prestacaodespesas/comprovante/${dataModal?.id}`,
@@ -113,18 +111,22 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
 
     onSubmit: async (values: PrestacaoDespesa) => {
       setSubmitting(true)
-
+      const teste = values.valor.toString().replace('.', '')
+      const teste2 = values.valor.toString()
+      const regex = /,|_/;
       try {
         if (propsModal?.action !== 'aprovar') 
         setStatus(BUTTON_STATE.LOADING)
 
         const data = new FormData()
-        
         data.append('id', values?.id?.toString() || null)
         data.append('descricao', values?.descricao)
         data.append('empresa', user.empresa?.id?.toString())
         data.append('prestacaoContas', values.prestacaoContas.id.toString())
-        data.append('valor', formatNumberPtBrToUs(values.valor).toString())
+        if(propsModal?.action === 'create' || regex.test(teste2))
+        data.append('valor', teste.toString().replace(',', '.'))
+        else if(regex.test(teste2) === false) 
+        data.append('valor', values.valor.toString())
         data.append(
           'dtDespesa',
           format(values.dtDespesa as Date, 'yyyy-MM-dd hh:mm:ss')
@@ -576,7 +578,7 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
               onSucess={() => {
                 location.reload()
                 handleReset(null)
-                //closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
+                closeModal(ModalEnum.createPrestacaoDespesa, prestacaoDespesa)
                 setStatusAprovar(BUTTON_STATE.NOTHING)
               }}
               buttonSize="md"
@@ -584,7 +586,6 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 e.preventDefault()
                 if (!isSubmitting) {
                   setStatusAprovar(BUTTON_STATE.LOADING)
-                  handleSubmit()
                   alterarSituacaoDespesa(PrestacaoDespesaStatus.Aprovado)
                 }
               }}
@@ -605,7 +606,6 @@ const FormCadastrarPrestacaoDespesa: React.FC = () => {
                 e.preventDefault()
                 if (!isSubmitting) {
                   setStatusReprovar(BUTTON_STATE.LOADING)
-                  handleSubmit()
                   alterarSituacaoDespesa(PrestacaoDespesaStatus.Reprovado)
                 }
               }}

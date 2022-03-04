@@ -20,7 +20,7 @@ export type PrestacaoDespesa = {
   empresa?: Empresa
   prestacaoContas?: PrestacaoContas
   tipoReembolso?: PrestacaoDespesaTipoReembolso
-  valor?: number
+  valor?: number | string
   dtDespesa?: Date
   comprovante?: any
   possuiComprovante?: boolean
@@ -28,7 +28,7 @@ export type PrestacaoDespesa = {
   observacao?: string
   quilometragem?: string
 }
-
+   
 export type PrestacaoDespesaFiltro = {}
 
 export type PrestacaoDespesaPagination = {
